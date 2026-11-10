@@ -5,6 +5,7 @@
 // Колонки таблицы — см. docs/concerts-sheet.md
 
 import sample from '../data/concerts.sample.json';
+import { parseCsv, rowsToConcerts } from './concerts-csv';
 
 export const CONCERT_TYPES = ['solo', 'orchestra', 'chamber', 'other'] as const;
 export type ConcertType = (typeof CONCERT_TYPES)[number];
@@ -19,16 +20,39 @@ export interface Concert {
   ticketsUrl: string;
 }
 
+let cache: Promise<Concert[]> | undefined;
+
 /**
- * Загружает концерты при сборке.
- * В режиме разработки без CONCERTS_CSV_URL — тестовые данные из concerts.sample.json.
- * TODO (этап 4): скачать CSV по CONCERTS_CSV_URL, разобрать, отфильтровать «Показывать = нет»,
- * привести дату ДД.ММ.ГГГГ → YYYY-MM-DD. При ошибке сети — вернуть [] и не ронять сборку.
+ * Загружает концерты при сборке (один раз на всю сборку — обе языковые версии берут один результат).
+ * CONCERTS_CSV_URL — ссылка на опубликованную таблицу или локальный CSV-файл (для проверки).
+ * В режиме разработки без ссылки — тестовые данные из concerts.sample.json.
+ * Ошибка сети не роняет сборку: афиша будет пустой, а в браузере её подтянет /api/concerts.php.
  */
-export async function loadConcerts(): Promise<Concert[]> {
+export function loadConcerts(): Promise<Concert[]> {
+  cache ??= fetchConcerts();
+  return cache;
+}
+
+async function fetchConcerts(): Promise<Concert[]> {
   const url = import.meta.env.CONCERTS_CSV_URL;
   if (!url) return import.meta.env.DEV ? (sample.items as Concert[]) : [];
-  return [];
+  try {
+    let text: string;
+    if (/^https?:\/\//i.test(url)) {
+      const res = await fetch(url, { signal: AbortSignal.timeout(10_000) });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      text = await res.text();
+    } else {
+      const { readFile } = await import('node:fs/promises');
+      text = await readFile(url, 'utf8');
+    }
+    const concerts = rowsToConcerts(parseCsv(text));
+    console.log(`[concerts] загружено концертов: ${concerts.length}`);
+    return concerts;
+  } catch (err) {
+    console.warn(`[concerts] не удалось загрузить таблицу (${(err as Error).message}) — афиша будет пустой`);
+    return [];
+  }
 }
 
 /** Сегодняшняя дата в Москве в виде YYYY-MM-DD — граница «предстоящие / прошедшие». */

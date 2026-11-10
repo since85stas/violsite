@@ -1,10 +1,11 @@
 ---
-// Афиша: вкладки «Предстоящие / Прошедшие», карточки концертов.
-// Списки рендерятся при сборке; скрипт переключает вкладки и переносит в «Прошедшие»
-// концерты, дата которых наступила после сборки.
-// TODO (этап 4): обновление из /api/concerts.php, JSON-LD MusicEvent.
-import { type Lang, useTranslations } from '../i18n/ui';
-import type { Concert } from '../lib/concerts';
+// Афиша: вкладки «Предстоящие / Прошедшие», карточки концертов, JSON-LD MusicEvent.
+// Списки рендерятся при сборке (SEO, работа без JS). В браузере скрипт запрашивает
+// /api/concerts.php и, если таблица изменилась, перерисовывает списки; если API
+// недоступно — просто переносит в «Прошедшие» концерты, дата которых уже наступила.
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import { CONCERT_TYPES, type Concert } from '../lib/concerts';
+import site from '../data/site.json';
 
 interface Props { lang: Lang; upcoming: Concert[]; past: Concert[] }
 const { lang, upcoming, past } = Astro.props;
@@ -26,8 +27,31 @@ const lists = [
   { id: 'upcoming', label: t('concerts.upcoming'), items: upcoming, empty: t('concerts.empty') },
   { id: 'past', label: t('concerts.past'), items: past.slice(0, PAST_LIMIT), empty: t('concerts.pastEmpty') },
 ] as const;
+
+// Тексты для перерисовки в браузере
+const labels = {
+  locale,
+  pastLimit: PAST_LIMIT,
+  tickets: t('concerts.tickets'),
+  types: Object.fromEntries(CONCERT_TYPES.map((k) => [k, t(`concerts.type.${k}`)])),
+};
+
+// Разметка для поисковиков: предстоящие концерты как MusicEvent
+const performer = { '@type': 'Person', name: pick(site.name, lang) };
+const jsonLd = upcoming.map((c) => ({
+  '@context': 'https://schema.org',
+  '@type': 'MusicEvent',
+  name: c.program ? `${performer.name}: ${c.program.split('\n')[0]}` : `${performer.name} — ${c.city}`,
+  startDate: c.time ? `${c.date}T${c.time}:00+03:00` : c.date,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: { '@type': 'Place', name: c.venue, address: { '@type': 'PostalAddress', addressLocality: c.city } },
+  performer,
+  ...(c.program && { description: c.program }),
+  ...(c.ticketsUrl && { offers: { '@type': 'Offer', url: c.ticketsUrl, availability: 'https://schema.org/InStock' } }),
+}));
 ---
-<section class="section section--soft" id="concerts">
+<section class="section section--soft" id="concerts" data-concerts data-labels={JSON.stringify(labels)}>
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">{t('concerts.eyebrow')}</div>
@@ -78,47 +102,54 @@ const lists = [
       </div>
     ))}
   </div>
+  {jsonLd.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />}
 </section>
 
-<style>
-  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
-  .tab {
+<style is:global>
+  /* global — потому что карточки перерисовывает скрипт, а у созданных им элементов нет scoped-атрибутов Astro */
+  #concerts .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  #concerts .tab {
     padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line);
     background: transparent; color: var(--muted); font: inherit; font-size: 14px; cursor: pointer;
   }
-  .tab:hover { color: var(--ink); }
-  .tab[aria-selected='true'] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  #concerts .tab:hover { color: var(--ink); }
+  #concerts .tab[aria-selected='true'] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
 
-  .clist { list-style: none; margin: 0; padding: 0; }
-  .clist__empty { padding: 22px 0; }
-  .concert {
+  #concerts .clist { list-style: none; margin: 0; padding: 0; }
+  #concerts .clist__empty { padding: 22px 0; }
+  #concerts .concert {
     display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 24px; align-items: center;
     padding: 22px 0; border-bottom: 1px solid var(--line);
   }
-  .concert__date { display: flex; flex-direction: column; font-variant-numeric: tabular-nums; }
-  .concert__day { font-family: var(--display); font-size: 32px; line-height: 1; margin-bottom: 4px; }
-  .concert__month { font-size: 13px; color: var(--muted); }
-  .concert__where { font-weight: 500; }
-  .concert__program { font-size: 14px; color: var(--muted); margin-top: 4px; }
-  .concert__meta { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
-  .concert__tickets { padding: 8px 16px; font-size: 14px; }
-  .pill {
+  #concerts .concert__date { display: flex; flex-direction: column; font-variant-numeric: tabular-nums; }
+  #concerts .concert__day { font-family: var(--display); font-size: 32px; line-height: 1; margin-bottom: 4px; }
+  #concerts .concert__month { font-size: 13px; color: var(--muted); }
+  #concerts .concert__where { font-weight: 500; }
+  #concerts .concert__program { font-size: 14px; color: var(--muted); margin-top: 4px; white-space: pre-line; }
+  #concerts .concert__meta { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+  #concerts .concert__tickets { padding: 8px 16px; font-size: 14px; }
+  #concerts .pill {
     font-size: 12px; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
     background: var(--bg); color: var(--muted); border: 1px solid var(--line);
   }
-  [data-panel='past'] .concert__tickets { display: none; }
+  #concerts [data-panel='past'] .concert__tickets { display: none; }
 
   @media (max-width: 640px) {
-    .concert { grid-template-columns: 76px minmax(0, 1fr); gap: 10px 16px; align-items: start; }
-    .concert__meta { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
-    .concert__day { font-size: 28px; }
+    #concerts .concert { grid-template-columns: 76px minmax(0, 1fr); gap: 10px 16px; align-items: start; }
+    #concerts .concert__meta { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
+    #concerts .concert__day { font-size: 28px; }
   }
 </style>
 
 <script>
-  const tablist = document.querySelector<HTMLElement>('[data-concert-tabs]');
+  interface Concert { date: string; time: string; city: string; venue: string; program: string; type: string; ticketsUrl: string }
+  interface Labels { locale: string; pastLimit: number; tickets: string; types: Record<string, string> }
+
+  const section = document.querySelector<HTMLElement>('[data-concerts]');
+  const tablist = section?.querySelector<HTMLElement>('[data-concert-tabs]');
   const tabs = tablist ? Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]')) : [];
 
+  // --- вкладки ---
   const select = (tab: HTMLButtonElement, focus = false) => {
     for (const t of tabs) {
       const on = t === tab;
@@ -129,29 +160,86 @@ const lists = [
     }
     if (focus) tab.focus();
   };
-
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => select(tab));
     tab.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         e.preventDefault();
-        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        select(next, true);
+        select(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length], true);
       }
     });
   });
 
-  // Концерты, прошедшие после сборки сайта, переносим в «Прошедшие»
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Moscow' }).format(new Date());
-  const upcomingList = document.querySelector<HTMLElement>('[data-list="upcoming"]');
-  const pastList = document.querySelector<HTMLElement>('[data-list="past"]');
-  if (upcomingList && pastList) {
-    const stale = Array.from(upcomingList.querySelectorAll<HTMLElement>('[data-date]'))
-      .filter((li) => (li.dataset.date ?? '') < today);
+  if (section) {
+    const labels = JSON.parse(section.dataset.labels ?? '{}') as Labels;
+    const upcomingList = section.querySelector<HTMLElement>('[data-list="upcoming"]')!;
+    const pastList = section.querySelector<HTMLElement>('[data-list="past"]')!;
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Moscow' }).format(new Date());
+
+    const updateEmpty = () => {
+      for (const list of [upcomingList, pastList]) {
+        const empty = list.parentElement?.querySelector<HTMLElement>('[data-empty]');
+        if (empty) empty.hidden = list.children.length > 0;
+      }
+    };
+
+    const el = (tag: string, cls: string, text?: string) => {
+      const node = document.createElement(tag);
+      if (cls) node.className = cls;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+
+    const card = (c: Concert) => {
+      const d = new Date(`${c.date}T12:00:00`);
+      const fmt = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(labels.locale, o).format(d).replace('.', '');
+      const li = el('li', 'concert');
+      li.dataset.date = c.date;
+
+      const date = el('div', 'concert__date');
+      date.append(
+        el('span', 'concert__day', String(d.getDate())),
+        el('span', 'concert__month', `${fmt({ month: 'short' })} ${d.getFullYear()}`),
+        el('span', 'concert__month', `${fmt({ weekday: 'short' })}${c.time ? `, ${c.time}` : ''}`),
+      );
+
+      const info = el('div', 'concert__info');
+      info.append(el('div', 'concert__where', `${c.city} — ${c.venue}`));
+      if (c.program) info.append(el('div', 'concert__program', c.program));
+
+      const meta = el('div', 'concert__meta');
+      meta.append(el('span', 'pill', labels.types[c.type] ?? labels.types.other));
+      if (/^https?:\/\//i.test(c.ticketsUrl)) {
+        const a = el('a', 'btn concert__tickets', labels.tickets) as HTMLAnchorElement;
+        a.href = c.ticketsUrl;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        meta.append(a);
+      }
+
+      li.append(date, info, meta);
+      return li;
+    };
+
+    const render = (concerts: Concert[]) => {
+      const up = concerts.filter((c) => c.date >= today).sort((a, b) => a.date.localeCompare(b.date));
+      const past = concerts.filter((c) => c.date < today).sort((a, b) => b.date.localeCompare(a.date)).slice(0, labels.pastLimit);
+      upcomingList.replaceChildren(...up.map(card));
+      pastList.replaceChildren(...past.map(card));
+      updateEmpty();
+    };
+
+    // Сразу: переносим концерты, прошедшие после сборки сайта
+    const stale = Array.from(upcomingList.querySelectorAll<HTMLElement>('[data-date]')).filter((li) => (li.dataset.date ?? '') < today);
     stale.reverse().forEach((li) => pastList.prepend(li));
-    for (const list of [upcomingList, pastList]) {
-      const empty = list.parentElement?.querySelector<HTMLElement>('[data-empty]');
-      if (empty) empty.hidden = list.children.length > 0;
-    }
+    updateEmpty();
+
+    // Затем: свежие данные из таблицы (кэш на хостинге — 15 минут)
+    fetch('/api/concerts.php', { headers: { Accept: 'application/json' } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && Array.isArray(data.concerts)) render(data.concerts as Concert[]);
+      })
+      .catch(() => { /* API недоступно — остаётся версия со сборки */ });
   }
 </script>
