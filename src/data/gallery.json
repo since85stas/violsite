@@ -1,0 +1,26 @@
+{
+  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. Пустой file — показывается заглушка.",
+  "items": [
+    {
+      "file": "",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
+      "meta": { "ru": "Город, площадка · год", "en": "City, venue · year" }
+    },
+    {
+      "file": "",
+      "category": "portrait",
+      "size": "tall",
+      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "",
+      "category": "lessons",
+      "size": "",
+      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
+      "meta": { "ru": "", "en": "" }
+    }
+  ]
+}

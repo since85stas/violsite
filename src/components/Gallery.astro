@@ -1,0 +1,24 @@
+---
+// Галерея: фильтры по категориям, сетка разных размеров, лайтбокс.
+// TODO (этап 3): фото из src/assets/gallery/ через getImage (превью ~600px, полноразмер ~1600px),
+// фильтры и лайтбокс из прототипа (src/scripts/gallery.ts).
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import gallery from '../data/gallery.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const filters = ['all', 'concert', 'lessons', 'portrait'] as const;
+---
+<section class="section" id="gallery">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('gallery.eyebrow')}</div>
+      <h2>{t('gallery.title')}</h2>
+    </div>
+    <div role="group">
+      {filters.map((f) => <button type="button" class="btn" data-filter={f}>{t(`gallery.${f}`)}</button>)}
+    </div>
+    <ul>{gallery.items.map((g) => <li data-category={g.category}>{pick(g.caption, lang)}</li>)}</ul>
+  </div>
+</section>

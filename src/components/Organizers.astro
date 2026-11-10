@@ -1,0 +1,28 @@
+---
+// Для организаторов: текст, пресс-кит и репертуар (PDF), контакты.
+// TODO (этап 3): вёрстка из прототипа.
+import { type Lang, useTranslations } from '../i18n/ui';
+import site from '../data/site.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const c = site.contacts;
+---
+<section class="section section--soft" id="organizers">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('org.eyebrow')}</div>
+      <h2>{t('org.title')}</h2>
+    </div>
+    <p>
+      <a class="btn" href={site.files.presskit}>{t('org.presskit')}</a>
+      <a class="btn" href={site.files.repertoire}>{t('org.repertoire')}</a>
+    </p>
+    <ul>
+      <li>{c.emailConcerts}</li>
+      <li>{c.phone}</li>
+      {c.telegram && <li>@{c.telegram}</li>}
+    </ul>
+  </div>
+</section>

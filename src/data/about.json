@@ -1,0 +1,13 @@
+{
+  "title": { "ru": "TODO: заголовок блока «О себе»", "en": "TODO: About headline" },
+  "paragraphs": {
+    "ru": ["TODO: биография, абзац 1", "TODO: биография, абзац 2"],
+    "en": ["TODO: biography, paragraph 1", "TODO: biography, paragraph 2"]
+  },
+  "facts": [
+    { "value": "000", "label": { "ru": "концертов", "en": "concerts" } },
+    { "value": "00", "label": { "ru": "лет преподавания", "en": "years of teaching" } },
+    { "value": "0", "label": { "ru": "конкурсов", "en": "competitions" } },
+    { "value": "00", "label": { "ru": "учеников", "en": "students" } }
+  ]
+}

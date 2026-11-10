@@ -1,0 +1,10 @@
+{
+  "_comment": "Видео: youtubeId — часть ссылки после v=. Превью берётся с YouTube, плеер подгружается по клику.",
+  "items": [
+    {
+      "youtubeId": "",
+      "title": { "ru": "TODO: название видео", "en": "TODO: video title" },
+      "meta": { "ru": "Live · 00 мин", "en": "Live · 00 min" }
+    }
+  ]
+}

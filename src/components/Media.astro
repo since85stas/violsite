@@ -1,0 +1,19 @@
+---
+// Видео: превью YouTube, плеер подгружается по клику (lite-embed).
+// TODO (этап 3): карточки из прототипа + src/scripts/video.ts
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import videos from '../data/videos.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section" id="media">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('media.eyebrow')}</div>
+      <h2>{t('media.title')}</h2>
+    </div>
+    <ul>{videos.items.map((v) => <li>{pick(v.title, lang)} <span class="muted">{pick(v.meta, lang)}</span></li>)}</ul>
+  </div>
+</section>

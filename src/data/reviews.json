@@ -1,0 +1,9 @@
+{
+  "_comment": "Отзывы публикуются только с разрешения автора.",
+  "items": [
+    {
+      "text": { "ru": "TODO: текст отзыва", "en": "TODO: review text" },
+      "author": { "ru": "Имя, кто занимается", "en": "Name, student type" }
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "_comment": "Уроки: аудитории, цены, варианты для формы. Пробный урок платный. Время в форме — желаемое, без проверки занятости.",
+  "title": { "ru": "TODO: заголовок раздела уроков", "en": "TODO: lessons headline" },
+  "intro": { "ru": "TODO: вводный абзац", "en": "TODO: intro paragraph" },
+  "audiences": [
+    {
+      "id": "kids",
+      "title": { "ru": "Дети", "en": "Children" },
+      "text": { "ru": "TODO", "en": "TODO" },
+      "violinSizes": ["1/16", "1/8", "1/4", "1/2", "3/4", "4/4"]
+    },
+    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "TODO", "en": "TODO" } },
+    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "TODO", "en": "TODO" } }
+  ],
+  "prices": [
+    { "id": "trial", "label": { "ru": "Пробный урок, 30 минут", "en": "Trial lesson, 30 min" }, "price": 0, "currency": "RUB" },
+    { "id": "45", "label": { "ru": "Урок 45 минут", "en": "Lesson, 45 min" }, "price": 0, "currency": "RUB" },
+    { "id": "60", "label": { "ru": "Урок 60 минут", "en": "Lesson, 60 min" }, "price": 0, "currency": "RUB" },
+    { "id": "pack8", "label": { "ru": "Абонемент: 8 уроков по 45 минут", "en": "8 lessons × 45 min" }, "price": 0, "currency": "RUB" }
+  ],
+  "form": {
+    "whoOptions": [
+      { "value": "kid-5-9", "label": { "ru": "Ребёнок 5–9 лет", "en": "Child, 5–9" } },
+      { "value": "kid-10-16", "label": { "ru": "Ребёнок 10–16 лет", "en": "Child, 10–16" } },
+      { "value": "adult-new", "label": { "ru": "Взрослый, с нуля", "en": "Adult, beginner" } },
+      { "value": "adult-back", "label": { "ru": "Взрослый, уже играл", "en": "Adult, has played before" } }
+    ],
+    "daysAhead": 14,
+    "skipWeekdays": [0],
+    "timeOptions": [
+      { "value": "morning", "label": { "ru": "Утро, 10–12", "en": "Morning, 10–12" } },
+      { "value": "day", "label": { "ru": "День, 12–16", "en": "Afternoon, 12–16" } },
+      { "value": "evening", "label": { "ru": "Вечер, 16–20", "en": "Evening, 16–20" } }
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+---
+// Афиша: вкладки «Предстоящие / Прошедшие», карточки концертов, JSON-LD MusicEvent.
+// TODO (этап 4): вёрстка из прототипа, обновление списка из /api/concerts.php (src/scripts/concerts.ts),
+// JSON-LD для предстоящих концертов.
+import { type Lang, useTranslations } from '../i18n/ui';
+import type { Concert } from '../lib/concerts';
+
+interface Props { lang: Lang; upcoming: Concert[]; past: Concert[] }
+const { lang, upcoming, past } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section section--soft" id="concerts">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('concerts.eyebrow')}</div>
+      <h2>{t('concerts.title')}</h2>
+    </div>
+    <h3>{t('concerts.upcoming')}</h3>
+    {upcoming.length === 0
+      ? <p class="muted">{t('concerts.empty')}</p>
+      : <ul>{upcoming.map((c) => <li>{c.date} {c.time} — {c.city}, {c.venue}. {c.program}</li>)}</ul>}
+    {past.length > 0 && (
+      <>
+        <h3>{t('concerts.past')}</h3>
+        <ul>{past.map((c) => <li>{c.date} — {c.city}, {c.venue}</li>)}</ul>
+      </>
+    )}
+  </div>
+</section>

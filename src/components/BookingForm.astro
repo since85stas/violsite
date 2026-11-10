@@ -1,0 +1,57 @@
+---
+// Заявка на пробный урок (платный). Время — желаемое, Анна подтверждает вручную.
+// Отправка: POST /api/lead.php → Telegram + почта.
+// TODO (этап 5): список дней на daysAhead вперёд (src/scripts/booking.ts), проверка полей,
+// honeypot и метка времени, сообщения об успехе/ошибке, цель Метрики.
+import { type Lang, useTranslations, localizePath, pick } from '../i18n/ui';
+import lessons from '../data/lessons.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const { whoOptions, timeOptions } = lessons.form;
+---
+<form class="booking" id="booking" method="post" action="/api/lead.php" novalidate>
+  <h3>{t('book.title')}</h3>
+  <input type="hidden" name="lang" value={lang} />
+
+  <fieldset>
+    <legend>{t('book.format')}</legend>
+    <label><input type="radio" name="format" value="offline" checked /> {t('book.offline')}</label>
+    <label><input type="radio" name="format" value="online" /> {t('book.online')}</label>
+  </fieldset>
+
+  <label>{t('book.day')}
+    <select name="day" id="booking-day"><option value="">—</option></select>
+  </label>
+
+  <label>{t('book.time')}
+    <select name="time">
+      {timeOptions.map((o) => <option value={o.value}>{pick(o.label, lang)}</option>)}
+    </select>
+  </label>
+
+  <label>{t('book.who')}
+    <select name="who">
+      {whoOptions.map((o) => <option value={o.value}>{pick(o.label, lang)}</option>)}
+    </select>
+  </label>
+
+  <label>{t('book.name')} <input name="name" autocomplete="name" required /></label>
+  <label>{t('book.contact')} <input name="contact" required /></label>
+  <label>{t('book.comment')} <textarea name="comment" rows="3"></textarea></label>
+
+  <!-- антиспам: поле-ловушка, людям не видно -->
+  <div class="sr-only" aria-hidden="true">
+    <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <input type="hidden" name="ts" value="" />
+
+  <label>
+    <input type="checkbox" name="agree" required />
+    {t('book.agree')} — <a href={localizePath('/privacy', lang)}>{t('book.policy')}</a>
+  </label>
+
+  <p class="muted">{t('book.note')}</p>
+  <button class="btn btn--primary" type="submit">{t('book.submit')}</button>
+</form>

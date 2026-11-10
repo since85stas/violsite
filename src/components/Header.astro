@@ -1,0 +1,47 @@
+---
+// Шапка: логотип, якорное меню, переключатель языка, кнопка записи.
+// TODO (этап 3): мобильное меню-бургер, sticky-шапка как в прототипе.
+import { type Lang, useTranslations, localizePath, pick } from '../i18n/ui';
+import site from '../data/site.json';
+
+interface Props { lang: Lang; path: string }
+const { lang, path } = Astro.props;
+const t = useTranslations(lang);
+const home = localizePath('/', lang);
+const otherLang: Lang = lang === 'ru' ? 'en' : 'ru';
+
+const links = [
+  ['about', t('nav.about')],
+  ['concerts', t('nav.concerts')],
+  ['media', t('nav.media')],
+  ['gallery', t('nav.gallery')],
+  ['lessons', t('nav.lessons')],
+  ['organizers', t('nav.organizers')],
+] as const;
+---
+<header class="header">
+  <div class="wrap header__inner">
+    <a class="header__logo" href={home}>{pick(site.name, lang)}</a>
+    <nav aria-label={t('nav.menu')}>
+      <ul class="header__nav">
+        {links.map(([id, label]) => <li><a href={`${home}#${id}`}>{label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <a class="header__lang" href={localizePath(path, otherLang)} hreflang={otherLang} lang={otherLang}>{t('lang.switch')}</a>
+      <a class="btn btn--primary header__cta" href={`${home}#lessons`}>{t('nav.book')}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header { border-bottom: 1px solid var(--line); }
+  .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+  .header__logo { font-family: var(--display); font-size: 20px; text-decoration: none; white-space: nowrap; }
+  .header__nav { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
+  .header__nav a, .header__lang { text-decoration: none; color: var(--muted); }
+  .header__nav a:hover, .header__lang:hover { color: var(--ink); }
+  .header__actions { display: flex; align-items: center; gap: 16px; font-size: 14px; }
+  .header__cta { padding: 8px 16px; font-size: 14px; }
+  @media (max-width: 900px) { .header__nav { display: none; } }
+</style>

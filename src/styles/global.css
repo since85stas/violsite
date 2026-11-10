@@ -1,0 +1,90 @@
+/* Дизайн-токены из утверждённого прототипа (docs/prototype/index.html).
+   Минимализм + тёплый акцент в разделе уроков. Светлая и тёмная темы. */
+:root {
+  --bg: #ffffff;
+  --soft: #f8f6f2;
+  --ink: #221f1b;
+  --muted: #6a645b;
+  --line: #e6e1d9;
+  --warm: #f6ead6;
+  --warm-ink: #5b3a14;
+  --accent: #a0561b;
+  --accent-ink: #ffffff;
+  --ok: #2f6b3a;
+  --danger: #b3261e;
+
+  --display: 'Prata', 'Times New Roman', Georgia, serif;
+  --body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --maxw: 1080px;
+  --gutter: 16px;
+  --section: 72px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #151311;
+    --soft: #1c1a17;
+    --ink: #f0ebe3;
+    --muted: #a69e92;
+    --line: #2f2b26;
+    --warm: #2a2016;
+    --warm-ink: #f1d7b2;
+    --accent: #e2a263;
+    --accent-ink: #1a130c;
+    --ok: #8ccb95;
+    --danger: #f2a49b;
+    color-scheme: dark;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.15; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(40px, 6.4vw, 76px); }
+h2 { font-size: clamp(28px, 4vw, 40px); }
+h3 { font-size: 22px; }
+p { margin: 0; }
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.section { padding-block: var(--section); }
+.section--soft { background: var(--soft); }
+.section--warm { background: var(--warm); color: var(--warm-ink); }
+.sec-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; max-width: 640px; }
+.eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.muted { color: var(--muted); }
+.todo { border: 1px dashed var(--line); border-radius: 6px; padding: 24px; color: var(--muted); font-size: 14px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 22px; border-radius: 999px; border: 1px solid var(--ink);
+  background: transparent; color: var(--ink); text-decoration: none;
+  font: inherit; font-weight: 500; font-size: 15px; cursor: pointer;
+}
+.btn:hover { background: var(--soft); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--accent); filter: brightness(1.07); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

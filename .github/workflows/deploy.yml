@@ -1,0 +1,55 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Ночная пересборка, чтобы вшитая в HTML афиша обновлялась (03:00 МСК)
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          CONCERTS_CSV_URL: ${{ vars.CONCERTS_CSV_URL }}
+          PUBLIC_YM_ID: ${{ vars.PUBLIC_YM_ID }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+
+  deploy:
+    # Деплой включается, когда в настройках репозитория задана переменная DEPLOY_ENABLED=true
+    # и секреты SSH_HOST, SSH_USER, SSH_KEY, SSH_PATH (см. README → «Деплой»).
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.DEPLOY_ENABLED == 'true'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+      - name: Upload with rsync
+        # config.php, кэш и журнал заявок живут только на хостинге — не трогаем их
+        run: >
+          rsync -az --delete
+          --exclude 'api/config.php'
+          --exclude 'api/cache/*.json'
+          --exclude 'api/logs/*.log'
+          dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"

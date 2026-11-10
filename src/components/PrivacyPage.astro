@@ -1,0 +1,19 @@
+---
+// Политика обработки персональных данных.
+// TODO (этап 6): текст по 152-ФЗ (оператор, цели, состав данных, сроки хранения, права субъекта,
+// контакты для запросов), согласовать с юристом. Английская версия — перевод.
+import Base from '../layouts/Base.astro';
+import { type Lang, useTranslations } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<Base lang={lang} path="/privacy" title={t('footer.privacy')}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{t('footer.privacy')}</h1>
+      <div class="todo">TODO: текст политики</div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,22 @@
+---
+// О себе: биография и блок цифр.
+// TODO (этап 3): двухколоночная вёрстка из прототипа.
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import about from '../data/about.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('about.eyebrow')}</div>
+      <h2>{pick(about.title, lang)}</h2>
+    </div>
+    {pick(about.paragraphs, lang).map((p) => <p>{p}</p>)}
+    <ul>
+      {about.facts.map((f) => <li><strong>{f.value}</strong> {pick(f.label, lang)}</li>)}
+    </ul>
+  </div>
+</section>

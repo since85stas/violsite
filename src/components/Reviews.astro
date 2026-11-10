@@ -1,0 +1,24 @@
+---
+// Отзывы учеников.
+// TODO (этап 3): три колонки из прототипа, JSON-LD Review (этап 7).
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import reviews from '../data/reviews.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section" id="reviews">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('reviews.eyebrow')}</div>
+      <h2>{t('reviews.title')}</h2>
+    </div>
+    {reviews.items.map((r) => (
+      <blockquote>
+        <p>{pick(r.text, lang)}</p>
+        <cite>{pick(r.author, lang)}</cite>
+      </blockquote>
+    ))}
+  </div>
+</section>

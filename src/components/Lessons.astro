@@ -1,0 +1,29 @@
+---
+// Уроки: аудитории, размеры скрипок, цены, форма записи. Тёплый фон раздела.
+// TODO (этап 3): вёрстка из прототипа.
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import lessons from '../data/lessons.json';
+import BookingForm from './BookingForm.astro';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const fmt = new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
+---
+<section class="section section--warm" id="lessons">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">{t('lessons.eyebrow')}</div>
+      <h2>{pick(lessons.title, lang)}</h2>
+      <p>{pick(lessons.intro, lang)}</p>
+    </div>
+    <ul>
+      {lessons.audiences.map((a) => <li><strong>{pick(a.title, lang)}</strong> — {pick(a.text, lang)}</li>)}
+    </ul>
+    <h3>{t('lessons.prices')}</h3>
+    <ul>
+      {lessons.prices.map((p) => <li>{pick(p.label, lang)} — {fmt.format(p.price)}</li>)}
+    </ul>
+    <BookingForm lang={lang} />
+  </div>
+</section>

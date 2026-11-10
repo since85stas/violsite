@@ -1,0 +1,5 @@
+# Закрываем прямой доступ к конфигу и служебным файлам
+<FilesMatch "^(config(\.example)?\.php|.*\.log|.*\.json)$">
+    Require all denied
+</FilesMatch>
+Options -Indexes

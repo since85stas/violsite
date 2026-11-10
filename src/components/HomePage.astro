@@ -1,0 +1,28 @@
+---
+// Главная страница целиком — одна для обоих языков.
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import About from './About.astro';
+import Concerts from './Concerts.astro';
+import Media from './Media.astro';
+import Gallery from './Gallery.astro';
+import Lessons from './Lessons.astro';
+import Reviews from './Reviews.astro';
+import Organizers from './Organizers.astro';
+import { type Lang } from '../i18n/ui';
+import { loadConcerts, splitByDate } from '../lib/concerts';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const { upcoming, past } = splitByDate(await loadConcerts());
+---
+<Base lang={lang} path="/">
+  <Hero lang={lang} next={upcoming[0]} />
+  <About lang={lang} />
+  <Concerts lang={lang} upcoming={upcoming} past={past} />
+  <Media lang={lang} />
+  <Gallery lang={lang} />
+  <Lessons lang={lang} />
+  <Reviews lang={lang} />
+  <Organizers lang={lang} />
+</Base>

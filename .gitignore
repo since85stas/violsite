@@ -1,0 +1,24 @@
+# зависимости и сборка
+node_modules/
+dist/
+.astro/
+
+# окружение и секреты
+.env
+.env.*
+!.env.example
+public/api/config.php
+
+# данные, которые PHP пишет на хостинге
+public/api/cache/*
+public/api/logs/*
+!public/api/cache/.htaccess
+!public/api/logs/.htaccess
+
+# системное
+.DS_Store
+Thumbs.db
+*.log
+.vscode/*
+!.vscode/extensions.json
+.idea/
