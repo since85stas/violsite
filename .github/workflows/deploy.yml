@@ -22,7 +22,6 @@ jobs:
       - run: npm run build
         env:
           CONCERTS_CSV_URL: ${{ vars.CONCERTS_CSV_URL }}
-          PUBLIC_YM_ID: ${{ vars.PUBLIC_YM_ID }}
       - uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -46,9 +45,10 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       - name: Upload with rsync
-        # config.php и кэш живут только на хостинге — не трогаем их
+        # config.php, кэш концертов и статистика (api/cache/**) живут только на хостинге —
+        # защищаем их от удаления при --delete (P = protect)
         run: >
           rsync -az --delete
-          --exclude 'api/config.php'
-          --exclude 'api/cache/*.json'
+          --filter='P api/config.php'
+          --filter='P api/cache/**'
           dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"

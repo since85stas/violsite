@@ -1,5 +1,11 @@
-# Закрываем прямой доступ к конфигу и служебным файлам
-<FilesMatch "^(config(\.example)?\.php|.*\.log|.*\.json)$">
+# Закрываем прямой доступ к конфигу, общим функциям и служебным файлам
+<FilesMatch "^(config(\.example)?\.php|stats-lib\.php|.*\.log|.*\.json)$">
     Require all denied
 </FilesMatch>
 Options -Indexes
+
+# Передаём заголовок авторизации в PHP (нужно для пароля на stats.php при PHP в режиме CGI/FastCGI)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>

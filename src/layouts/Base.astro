@@ -23,7 +23,6 @@ const pageDescription = description ?? pick(site.seo.description, lang);
 const canonical = new URL(localizePath(path, lang), Astro.site);
 const altRu = new URL(localizePath(path, 'ru'), Astro.site);
 const altEn = new URL(localizePath(path, 'en'), Astro.site);
-const ymId = import.meta.env.PUBLIC_YM_ID;
 ---
 <!doctype html>
 <html lang={lang}>
@@ -47,8 +46,6 @@ const ymId = import.meta.env.PUBLIC_YM_ID;
     <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
 
     <slot name="head" />
-    {/* TODO (этап 7): Яндекс.Метрика с целями, когда задан PUBLIC_YM_ID */}
-    {ymId && <meta name="ym-id" content={ymId} />}
   </head>
   <body>
     <Header lang={lang} path={path} />
@@ -56,5 +53,30 @@ const ymId = import.meta.env.PUBLIC_YM_ID;
       <slot />
     </main>
     <Footer lang={lang} />
+
+    <script>
+      // Свой счётчик (/api/hit.php): просмотр страницы и клики по элементам с data-goal.
+      // Без кук и идентификаторов — сервер только прибавляет единицу к суммам за день.
+      const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
+      const send = (data: Record<string, string>) => {
+        if (local) return;
+        const body = new URLSearchParams(data);
+        if (!navigator.sendBeacon?.('/api/hit.php', body)) {
+          fetch('/api/hit.php', { method: 'POST', body, keepalive: true }).catch(() => {});
+        }
+      };
+
+      let ref = '';
+      try {
+        const host = document.referrer ? new URL(document.referrer).hostname : '';
+        if (host !== location.hostname) ref = host; // только домен, без пути и параметров
+      } catch { /* неверный referrer — считаем прямым заходом */ }
+      send({ t: 'view', p: location.pathname, r: ref });
+
+      document.addEventListener('click', (e) => {
+        const el = (e.target as Element | null)?.closest<HTMLElement>('[data-goal]');
+        if (el?.dataset.goal) send({ t: 'click', p: location.pathname, e: el.dataset.goal });
+      });
+    </script>
   </body>
 </html>

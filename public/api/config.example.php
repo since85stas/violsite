@@ -5,4 +5,9 @@ return [
     // Google Таблица концертов, опубликованная как CSV (docs/concerts-sheet.md)
     'concerts_csv_url' => '',
     'concerts_cache_ttl' => 900, // секунд (15 минут)
+
+    // Страница статистики /api/stats.php (docs/stats.md).
+    // Пустой пароль — страница отключена. Пароль — длинный и случайный.
+    'stats_user' => 'elena',
+    'stats_password' => '',
 ];

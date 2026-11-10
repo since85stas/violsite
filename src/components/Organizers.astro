@@ -36,15 +36,15 @@ const contacts = [
       <h2>{t('org.title')}</h2>
       <p class="muted">{text}</p>
       <div class="org__files">
-        <a class="btn" href={site.files.presskit} target="_blank" rel="noopener">{t('org.presskit')}</a>
-        <a class="btn" href={site.files.repertoire} target="_blank" rel="noopener">{t('org.repertoire')}</a>
+        <a class="btn" data-goal="presskit" href={site.files.presskit} target="_blank" rel="noopener">{t('org.presskit')}</a>
+        <a class="btn" data-goal="repertoire" href={site.files.repertoire} target="_blank" rel="noopener">{t('org.repertoire')}</a>
       </div>
     </div>
     <ul class="org__contacts">
       {contacts.map((item) => (
         <li>
           <span>{item.label}</span>
-          <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.value}</a>
+          <a data-goal="org_contact" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.value}</a>
         </li>
       ))}
     </ul>

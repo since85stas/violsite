@@ -91,7 +91,7 @@ const jsonLd = upcoming.map((c) => ({
                 <div class="concert__meta">
                   <span class="pill">{t(`concerts.type.${c.type}`)}</span>
                   {c.ticketsUrl && (
-                    <a class="btn concert__tickets" href={c.ticketsUrl} target="_blank" rel="noopener">{t('concerts.tickets')}</a>
+                    <a class="btn concert__tickets" data-goal="tickets" href={c.ticketsUrl} target="_blank" rel="noopener">{t('concerts.tickets')}</a>
                   )}
                 </div>
               </li>
@@ -211,6 +211,7 @@ const jsonLd = upcoming.map((c) => ({
       meta.append(el('span', 'pill', labels.types[c.type] ?? labels.types.other));
       if (/^https?:\/\//i.test(c.ticketsUrl)) {
         const a = el('a', 'btn concert__tickets', labels.tickets) as HTMLAnchorElement;
+        a.dataset.goal = 'tickets';
         a.href = c.ticketsUrl;
         a.target = '_blank';
         a.rel = 'noopener';

@@ -6,12 +6,13 @@
 - План и статус: [`docs/plan.md`](docs/plan.md)
 - Что запросить у заказчика: [`docs/content-checklist.md`](docs/content-checklist.md)
 - Таблица концертов: [`docs/concerts-sheet.md`](docs/concerts-sheet.md)
+- Статистика посещений (свой счётчик без кук): [`docs/stats.md`](docs/stats.md)
 
 ## Стек
 
 - [Astro](https://astro.build) 7 — статическая сборка, i18n (`/` — RU, `/en/` — EN), sitemap
 - Шрифты Prata и Golos Text — локально через Fontsource
-- PHP 8 на хостинге — один скрипт `public/api/concerts.php`: кэш таблицы концертов
+- PHP 8 на хостинге — `public/api/`: кэш таблицы концертов и свой счётчик посещений
 - Запись на уроки — через WhatsApp и Telegram с готовым текстом, сайт данные не собирает
 - GitHub Actions — сборка и деплой по rsync
 
@@ -66,7 +67,7 @@ docs/              план, чек-листы, прототип
 1. На хостинге: PHP 8, SSL, папка сайта. Создать `api/config.php` из `api/config.example.php`.
 2. В GitHub → Settings → Secrets and variables → Actions:
    - секреты `SSH_HOST`, `SSH_USER`, `SSH_KEY` (приватный ключ), `SSH_PATH` (папка сайта на хостинге);
-   - переменные `CONCERTS_CSV_URL`, `PUBLIC_YM_ID`, `DEPLOY_ENABLED=true`.
+   - переменные `CONCERTS_CSV_URL`, `DEPLOY_ENABLED=true`.
 3. Пуш в `main` → сборка → rsync на хостинг. Плюс ночная пересборка для свежей афиши.
 
 `config.php` и кэш концертов живут только на хостинге и не перезаписываются деплоем.
