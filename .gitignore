@@ -11,9 +11,7 @@ public/api/config.php
 
 # данные, которые PHP пишет на хостинге
 public/api/cache/*
-public/api/logs/*
 !public/api/cache/.htaccess
-!public/api/logs/.htaccess
 
 # системное
 .DS_Store

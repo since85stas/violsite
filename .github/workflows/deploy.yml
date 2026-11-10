@@ -46,10 +46,9 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
       - name: Upload with rsync
-        # config.php, кэш и журнал заявок живут только на хостинге — не трогаем их
+        # config.php и кэш живут только на хостинге — не трогаем их
         run: >
           rsync -az --delete
           --exclude 'api/config.php'
           --exclude 'api/cache/*.json'
-          --exclude 'api/logs/*.log'
           dist/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.SSH_PATH }}"
