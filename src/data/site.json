@@ -1,6 +1,6 @@
 {
   "_comment": "Общие данные сайта. TODO: заменить заглушки реальными данными от заказчика.",
-  "name": { "ru": "Имя Фамилия", "en": "Name Surname" },
+  "name": { "ru": "Елена Шпагина", "en": "Elena Shpagina" },
   "tagline": {
     "ru": "TODO: короткая фраза для первого экрана",
     "en": "TODO: short headline for the hero"
@@ -10,7 +10,7 @@
     "en": "TODO: 1–2 sentences about concerts and lessons"
   },
   "seo": {
-    "title": { "ru": "Имя Фамилия — скрипка: концерты и уроки", "en": "Name Surname — violinist: concerts and lessons" },
+    "title": { "ru": "Елена Шпагина — скрипка: концерты и уроки", "en": "Elena Shpagina — violinist: concerts and lessons" },
     "description": {
       "ru": "TODO: описание для поисковиков (до 160 символов)",
       "en": "TODO: search description (up to 160 characters)"

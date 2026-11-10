@@ -1,4 +1,4 @@
-<title>Анна Волкова — скрипка</title>
+<title>Елена Шпагина — скрипка</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -197,7 +197,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <header>
   <div class="wrap nav">
-    <a class="logo" href="#top">Анна Волкова</a>
+    <a class="logo" href="#top">Елена Шпагина</a>
     <ul>
       <li><a href="#about">О себе</a></li>
       <li><a href="#concerts">Концерты</a></li>
@@ -394,7 +394,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
           <div class="done" id="done" hidden>
             <b>Заявка принята</b>
             <span id="doneText"></span>
-            <span class="small muted">В готовом сайте заявка придёт Анне в Telegram и на почту. В прототипе данные никуда не отправляются.</span>
+            <span class="small muted">В готовом сайте заявка придёт Елене в Telegram и на почту. В прототипе данные никуда не отправляются.</span>
           </div>
         </form>
       </div>
@@ -407,7 +407,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       <div class="reviews">
         <blockquote><p>«Дочка ждёт уроков как праздника. За полгода — первое выступление на отчётном концерте.»</p><cite>Ольга, мама Веры (7 лет)</cite></blockquote>
         <blockquote><p>«Начал в 41 год. Думал, будет мучительно, а оказалось — лучшее, что я сделал для себя за последние годы.»</p><cite>Дмитрий, занимается в Zoom</cite></blockquote>
-        <blockquote><p>«Вернулась к скрипке после 15 лет перерыва. Анна быстро нашла, что мешает, и убрала зажим в правой руке.»</p><cite>Екатерина, продолжающая</cite></blockquote>
+        <blockquote><p>«Вернулась к скрипке после 15 лет перерыва. Елена быстро нашла, что мешает, и убрала зажим в правой руке.»</p><cite>Екатерина, продолжающая</cite></blockquote>
       </div>
     </div>
   </section>
@@ -425,10 +425,10 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
       </div>
       <div>
         <ul>
-          <li><span>Концерты</span><span>concert@volkova-violin.ru</span></li>
+          <li><span>Концерты</span><span>concert@shpagina-violin.ru</span></li>
           <li><span>Уроки</span><span>+7 900 000-00-00</span></li>
-          <li><span>Telegram</span><span>@volkova_violin</span></li>
-          <li><span>YouTube</span><span>Anna Volkova Violin</span></li>
+          <li><span>Telegram</span><span>@shpagina_violin</span></li>
+          <li><span>YouTube</span><span>Elena Shpagina Violin</span></li>
         </ul>
       </div>
     </div>
@@ -437,7 +437,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
 <footer>
   <div class="wrap">
-    <span>© 2026 Анна Волкова</span>
+    <span>© 2026 Елена Шпагина</span>
     <span>Прототип: имя, контакты, даты и цены — примеры</span>
   </div>
 </footer>
@@ -532,7 +532,7 @@ document.getElementById("bookForm").addEventListener("submit",e=>{
   if(!document.getElementById("agree").checked){document.getElementById("agreeErr").textContent="Нужно согласие на обработку данных";ok=false}
   if(!ok)return;
   const d=days[selDay];const fmt=document.querySelector('input[name="fmt"]:checked').value;
-  document.getElementById("doneText").textContent=`${name}, пробный урок: ${WD[d.getDay()].toLowerCase()}, ${d.getDate()} ${MONTHS[d.getMonth()]} в ${selTime}, ${fmt==="Zoom"?"онлайн в Zoom":"в студии"}. Анна свяжется с вами, чтобы подтвердить.`;
+  document.getElementById("doneText").textContent=`${name}, пробный урок: ${WD[d.getDay()].toLowerCase()}, ${d.getDate()} ${MONTHS[d.getMonth()]} в ${selTime}, ${fmt==="Zoom"?"онлайн в Zoom":"в студии"}. Елена свяжется с вами, чтобы подтвердить.`;
   document.getElementById("done").hidden=false;
   document.getElementById("done").scrollIntoView({block:"nearest",behavior:"smooth"});
 });

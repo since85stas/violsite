@@ -55,8 +55,8 @@ export const ui = {
     'book.agree': 'Согласен(на) на обработку персональных данных',
     'book.policy': 'Политика конфиденциальности',
     'book.submit': 'Отправить заявку',
-    'book.note': 'Время предварительное — Анна свяжется с вами и подтвердит.',
-    'book.done': 'Заявка отправлена. Анна свяжется с вами в ближайшее время.',
+    'book.note': 'Время предварительное — Елена свяжется с вами и подтвердит.',
+    'book.done': 'Заявка отправлена. Елена свяжется с вами в ближайшее время.',
     'book.fail': 'Не получилось отправить заявку. Напишите напрямую:',
 
     'reviews.eyebrow': 'Отзывы учеников',
@@ -119,8 +119,8 @@ export const ui = {
     'book.agree': 'I agree to the processing of my personal data',
     'book.policy': 'Privacy policy',
     'book.submit': 'Send request',
-    'book.note': 'The time is preliminary — Anna will contact you to confirm.',
-    'book.done': 'Request sent. Anna will get back to you shortly.',
+    'book.note': 'The time is preliminary — Elena will contact you to confirm.',
+    'book.done': 'Request sent. Elena will get back to you shortly.',
     'book.fail': 'Could not send the request. Please write directly:',
 
     'reviews.eyebrow': 'Student reviews',
