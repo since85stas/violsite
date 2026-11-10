@@ -1,6 +1,5 @@
 ---
 // Для организаторов: текст, пресс-кит и репертуар (PDF), контакты.
-// TODO (этап 3): вёрстка из прототипа.
 import { type Lang, useTranslations } from '../i18n/ui';
 import site from '../data/site.json';
 
@@ -8,21 +7,61 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const c = site.contacts;
+const s = site.social;
+
+const text = {
+  ru: 'Сольные программы, выступления с оркестром, камерные концерты и частные мероприятия. Пресс-кит и репертуарный список — по кнопкам ниже.',
+  en: 'Solo recitals, concertos with orchestra, chamber music and private events. Press kit and repertoire list are available below.',
+}[lang];
+
+const labels = {
+  ru: { email: 'Почта', phone: 'Телефон', telegram: 'Telegram', whatsapp: 'WhatsApp', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
+  en: { email: 'Email', phone: 'Phone', telegram: 'Telegram', whatsapp: 'WhatsApp', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
+}[lang];
+
+const contacts = [
+  c.emailConcerts && { label: labels.email, value: c.emailConcerts, href: `mailto:${c.emailConcerts}` },
+  c.phone && { label: labels.phone, value: c.phone, href: `tel:${c.phone.replace(/[^\d+]/g, '')}` },
+  c.telegram && { label: labels.telegram, value: `@${c.telegram}`, href: `https://t.me/${c.telegram}` },
+  c.whatsapp && { label: labels.whatsapp, value: c.whatsapp, href: `https://wa.me/${c.whatsapp.replace(/\D/g, '')}` },
+  s.youtube && { label: labels.youtube, value: 'YouTube', href: s.youtube },
+  s.vk && { label: labels.vk, value: 'VK', href: s.vk },
+  s.instagram && { label: labels.instagram, value: 'Instagram', href: s.instagram },
+].filter(Boolean) as { label: string; value: string; href: string }[];
 ---
 <section class="section section--soft" id="organizers">
-  <div class="wrap">
-    <div class="sec-head">
+  <div class="wrap org">
+    <div class="org__text">
       <div class="eyebrow">{t('org.eyebrow')}</div>
       <h2>{t('org.title')}</h2>
+      <p class="muted">{text}</p>
+      <div class="org__files">
+        <a class="btn" href={site.files.presskit} target="_blank" rel="noopener">{t('org.presskit')}</a>
+        <a class="btn" href={site.files.repertoire} target="_blank" rel="noopener">{t('org.repertoire')}</a>
+      </div>
     </div>
-    <p>
-      <a class="btn" href={site.files.presskit}>{t('org.presskit')}</a>
-      <a class="btn" href={site.files.repertoire}>{t('org.repertoire')}</a>
-    </p>
-    <ul>
-      <li>{c.emailConcerts}</li>
-      <li>{c.phone}</li>
-      {c.telegram && <li>@{c.telegram}</li>}
+    <ul class="org__contacts">
+      {contacts.map((item) => (
+        <li>
+          <span>{item.label}</span>
+          <a href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener' : undefined}>{item.value}</a>
+        </li>
+      ))}
     </ul>
   </div>
 </section>
+
+<style>
+  .org { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+  .org__text { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .org__text p { max-width: 46ch; }
+  .org__files { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+  .org__contacts { list-style: none; margin: 0; padding: 0; align-self: center; }
+  .org__contacts li { display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .org__contacts span { color: var(--muted); }
+  .org__contacts a { text-decoration: none; text-align: right; overflow-wrap: anywhere; }
+  .org__contacts a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 820px) {
+    .org { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>

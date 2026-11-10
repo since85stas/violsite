@@ -1,0 +1,73 @@
+{
+  "_comment": "Демо-фото с Unsplash (лицензия Unsplash: бесплатное использование). Показываются ТОЛЬКО в режиме разработки (npm run dev), пока нет настоящих фото. В сборку для сайта не попадают. Удалить, когда придут фото заказчицы.",
+  "portrait": {
+    "id": "1725215956940-91f616b95443",
+    "source": "https://unsplash.com/photos/a-woman-playing-a-violin-in-a-park-ptvPoez04A8"
+  },
+  "gallery": [
+    {
+      "id": "1499442711659-a9566695faed",
+      "source": "https://unsplash.com/photos/woman-playing-violin-beside-grand-piano-OZDmI-vO7Io",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "Камерный концерт с фортепиано", "en": "Chamber concert with piano" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1610306673745-258854d4bbcd",
+      "source": "https://unsplash.com/photos/woman-playing-violin-in-grayscale-al2FHdZKxpU",
+      "category": "portrait",
+      "size": "tall",
+      "caption": { "ru": "Портрет с инструментом", "en": "Portrait with the violin" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1692553173440-bc496a6f5e19",
+      "source": "https://unsplash.com/photos/a-woman-playing-a-violin-in-front-of-a-laptop-nVi8AIPmq5g",
+      "category": "lessons",
+      "size": "",
+      "caption": { "ru": "Урок в Zoom", "en": "Lesson on Zoom" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1474432377109-8d2d5109c1d2",
+      "source": "https://unsplash.com/photos/man-standing-in-front-of-stage-playing-violin-Kx4Mm3ZnZBc",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Репетиция в пустом зале", "en": "Rehearsal in an empty hall" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1701749059090-ac8afdba7b44",
+      "source": "https://unsplash.com/photos/a-violin-sitting-on-top-of-sheet-music-Ro7BTZEuqwE",
+      "category": "lessons",
+      "size": "tall",
+      "caption": { "ru": "Скрипка и ноты", "en": "Violin and sheet music" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1767216498325-4ed83f6edcd8",
+      "source": "https://unsplash.com/photos/musicians-playing-violins-during-a-performance-GI7fHIpM8dE",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Концерт с оркестром", "en": "Concert with orchestra" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1692552951845-cb7762a29638",
+      "source": "https://unsplash.com/photos/a-close-up-of-a-person-playing-a-violin-KGGsJI6r-0U",
+      "category": "lessons",
+      "size": "wide",
+      "caption": { "ru": "Постановка смычка", "en": "Bow hold" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    },
+    {
+      "id": "1704961183045-61f3ab298402",
+      "source": "https://unsplash.com/photos/a-violin-sitting-on-top-of-sheet-music-next-to-a-cup-of-coffee-I-dMjXqsmGM",
+      "category": "lessons",
+      "size": "",
+      "caption": { "ru": "Перед занятием", "en": "Before the lesson" },
+      "meta": { "ru": "Демо-фото", "en": "Demo photo" }
+    }
+  ]
+}

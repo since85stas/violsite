@@ -1,8 +1,10 @@
 {
-  "_comment": "Видео: youtubeId — часть ссылки после v=. Превью берётся с YouTube, плеер подгружается по клику.",
+  "_comment": "Видео. provider: youtube | rutube | vk. id: YouTube — 11 символов после v=; Rutube — id из ссылки rutube.ru/video/<id>/; VK — 'oid_id' из ссылки vk.com/video<oid>_<id> (например -12345_67890). poster — необязательная обложка из public/ (для VK обязательна: у VK нет публичных превью).",
   "items": [
     {
-      "youtubeId": "",
+      "provider": "youtube",
+      "id": "",
+      "poster": "",
       "title": { "ru": "TODO: название видео", "en": "TODO: video title" },
       "meta": { "ru": "Live · 00 мин", "en": "Live · 00 min" }
     }

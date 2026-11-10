@@ -1,29 +1,95 @@
 ---
-// Уроки: аудитории, размеры скрипок, цены, форма записи. Тёплый фон раздела.
-// TODO (этап 3): вёрстка из прототипа.
+// Уроки: тёплый раздел. Для кого (с размерами скрипок для детей), цены, формат занятий, форма записи.
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import lessons from '../data/lessons.json';
+import site from '../data/site.json';
 import BookingForm from './BookingForm.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const fmt = new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
+const price = (p: number) => (p > 0 ? fmt.format(p) : t('lessons.priceOnRequest'));
+const address = [pick(site.studio.address, lang), pick(site.studio.metro, lang)].filter(Boolean).join(', ');
 ---
 <section class="section section--warm" id="lessons">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head lessons-head">
       <div class="eyebrow">{t('lessons.eyebrow')}</div>
       <h2>{pick(lessons.title, lang)}</h2>
       <p>{pick(lessons.intro, lang)}</p>
     </div>
-    <ul>
-      {lessons.audiences.map((a) => <li><strong>{pick(a.title, lang)}</strong> — {pick(a.text, lang)}</li>)}
-    </ul>
-    <h3>{t('lessons.prices')}</h3>
-    <ul>
-      {lessons.prices.map((p) => <li>{pick(p.label, lang)} — {fmt.format(p.price)}</li>)}
-    </ul>
-    <BookingForm lang={lang} />
+
+    <div class="audiences">
+      {lessons.audiences.map((a) => (
+        <div class="audience">
+          <h3>{pick(a.title, lang)}</h3>
+          <p>{pick(a.text, lang)}</p>
+          {'violinSizes' in a && a.violinSizes && (
+            <>
+              <ul class="sizes" aria-label={t('lessons.sizes')}>
+                {a.violinSizes.map((s) => <li>{s}</li>)}
+              </ul>
+              <p class="audience__note">{t('lessons.sizes')}</p>
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <div class="lessons-grid">
+      <div class="lessons-info">
+        <h3>{t('lessons.prices')}</h3>
+        <ul class="prices">
+          {lessons.prices.map((p) => (
+            <li><span>{pick(p.label, lang)}</span><span class="prices__value">{price(p.price)}</span></li>
+          ))}
+        </ul>
+
+        <h3 class="lessons-info__formats">{t('lessons.formats')}</h3>
+        <ul class="formats">
+          <li><strong>{t('lessons.offline')}</strong>{address && <span> — {address}</span>}</li>
+          <li><strong>{t('lessons.online')}</strong></li>
+        </ul>
+      </div>
+
+      <BookingForm lang={lang} />
+    </div>
   </div>
 </section>
+
+<style>
+  .lessons-head p, .audience p, .formats span { color: color-mix(in srgb, var(--warm-ink) 78%, transparent); }
+  .section--warm :global(.eyebrow) { color: color-mix(in srgb, var(--warm-ink) 70%, transparent); }
+  .section--warm h2, .section--warm h3 { color: var(--warm-ink); }
+
+  .audiences { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-bottom: 48px; }
+  .audience {
+    display: flex; flex-direction: column; gap: 8px; padding: 22px; border-radius: 10px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+  }
+  .audience p { font-size: 15px; }
+  .audience__note { font-size: 13px !important; }
+  .sizes { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .sizes li {
+    font-size: 12px; font-variant-numeric: tabular-nums; padding: 2px 8px; border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--warm-ink) 30%, transparent);
+  }
+
+  .lessons-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 40px; align-items: start; }
+  .lessons-info { min-width: 0; }
+  .prices, .formats { list-style: none; margin: 12px 0 0; padding: 0; }
+  .prices li {
+    display: flex; justify-content: space-between; gap: 16px; padding: 14px 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--warm-ink) 18%, transparent); font-variant-numeric: tabular-nums;
+  }
+  .prices__value { font-weight: 500; white-space: nowrap; }
+  .lessons-info__formats { margin-top: 36px; }
+  .formats li { padding: 8px 0; }
+  .formats strong { font-weight: 500; }
+
+  @media (max-width: 900px) {
+    .audiences { grid-template-columns: 1fr; }
+    .lessons-grid { grid-template-columns: 1fr; }
+  }
+</style>

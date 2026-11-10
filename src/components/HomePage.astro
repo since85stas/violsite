@@ -18,6 +18,7 @@ const { upcoming, past } = splitByDate(await loadConcerts());
 ---
 <Base lang={lang} path="/">
   <Hero lang={lang} next={upcoming[0]} />
+  <div class="wrap" aria-hidden="true"><div class="staff"></div></div>
   <About lang={lang} />
   <Concerts lang={lang} upcoming={upcoming} past={past} />
   <Media lang={lang} />

@@ -6,7 +6,7 @@
 |---|---|---|---|
 | 1 | Подготовка: контент, домен, хостинг, бот, доступы | ⬜ | `docs/content-checklist.md` |
 | 2 | Каркас проекта: Astro, RU/EN, структура, токены дизайна | ✅ | весь репозиторий |
-| 3 | Вёрстка из прототипа: все блоки, бургер-меню, фото, видео, галерея | ⬜ | `src/components/`, `src/scripts/` |
+| 3 | Вёрстка из прототипа: все блоки, бургер-меню, фото, видео (YouTube/Rutube/VK), галерея | ✅ | `src/components/`, `src/scripts/` |
 | 4 | Концерты из Google Таблицы: сборка + `/api/concerts.php`, JSON-LD | ⬜ | `src/lib/concerts.ts`, `public/api/concerts.php` |
 | 5 | Заявки: форма, антиспам, Telegram + почта, журнал | ⬜ | `BookingForm.astro`, `public/api/lead.php` |
 | 6 | Политика конфиденциальности, согласие, уведомление РКН | ⬜ | `PrivacyPage.astro` |

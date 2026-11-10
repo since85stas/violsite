@@ -1,45 +1,94 @@
 ---
 // Заявка на пробный урок (платный). Время — желаемое, Елена подтверждает вручную.
-// Отправка: POST /api/lead.php → Telegram + почта.
-// TODO (этап 5): список дней на daysAhead вперёд (src/scripts/booking.ts), проверка полей,
-// honeypot и метка времени, сообщения об успехе/ошибке, цель Метрики.
+// Отправка: POST /api/lead.php (FormData) → JSON { ok }. Сам обработчик — этап 5.
+// Поля: lang, format, day, time, who, name, contact, comment, agree, website (ловушка), ts.
 import { type Lang, useTranslations, localizePath, pick } from '../i18n/ui';
 import lessons from '../data/lessons.json';
+import site from '../data/site.json';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const { whoOptions, timeOptions } = lessons.form;
+const { whoOptions, timeOptions, daysAhead, skipWeekdays } = lessons.form;
+const c = site.contacts;
+
+const messages = {
+  day: t('book.err.day'),
+  name: t('book.err.name'),
+  contact: t('book.err.contact'),
+  agree: t('book.err.agree'),
+  sending: t('book.sending'),
+  submit: t('book.submit'),
+};
 ---
-<form class="booking" id="booking" method="post" action="/api/lead.php" novalidate>
+<form
+  class="booking"
+  id="booking"
+  method="post"
+  action="/api/lead.php"
+  novalidate
+  data-booking
+  data-lang={lang}
+  data-days-ahead={daysAhead}
+  data-skip={JSON.stringify(skipWeekdays)}
+  data-messages={JSON.stringify(messages)}
+>
   <h3>{t('book.title')}</h3>
   <input type="hidden" name="lang" value={lang} />
 
-  <fieldset>
-    <legend>{t('book.format')}</legend>
-    <label><input type="radio" name="format" value="offline" checked /> {t('book.offline')}</label>
-    <label><input type="radio" name="format" value="online" /> {t('book.online')}</label>
+  <fieldset class="field">
+    <legend class="field__label">{t('book.format')}</legend>
+    <div class="seg">
+      <input type="radio" name="format" id="fmt-offline" value="offline" checked />
+      <label for="fmt-offline">{t('book.offline')}</label>
+      <input type="radio" name="format" id="fmt-online" value="online" />
+      <label for="fmt-online">{t('book.online')}</label>
+    </div>
   </fieldset>
 
-  <label>{t('book.day')}
-    <select name="day" id="booking-day"><option value="">—</option></select>
+  <fieldset class="field">
+    <legend class="field__label">{t('book.day')}</legend>
+    <div class="days" data-days role="radiogroup" aria-label={t('book.day')}></div>
+    <noscript><input type="date" name="day" /></noscript>
+    <span class="field__err" data-err="day" role="alert"></span>
+  </fieldset>
+
+  <fieldset class="field">
+    <legend class="field__label">{t('book.time')}</legend>
+    <div class="chips">
+      {timeOptions.map((o, i) => (
+        <>
+          <input type="radio" name="time" id={`time-${o.value}`} value={o.value} checked={i === 0} />
+          <label for={`time-${o.value}`}>{pick(o.label, lang)}</label>
+        </>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="two">
+    <label class="field">
+      <span class="field__label">{t('book.who')}</span>
+      <select name="who" id="book-who">
+        {whoOptions.map((o) => <option value={o.value}>{pick(o.label, lang)}</option>)}
+      </select>
+    </label>
+    <label class="field">
+      <span class="field__label">{t('book.name')}</span>
+      <input name="name" id="book-name" autocomplete="given-name" maxlength="80" />
+      <span class="field__err" data-err="name" role="alert"></span>
+    </label>
+  </div>
+
+  <label class="field">
+    <span class="field__label">{t('book.contact')}</span>
+    <input name="contact" id="book-contact" autocomplete="tel" inputmode="text" maxlength="80" placeholder={lang === 'ru' ? '+7 900 123-45-67 или @username' : '+44 7700 900123 or @username'} />
+    <span class="field__err" data-err="contact" role="alert"></span>
   </label>
 
-  <label>{t('book.time')}
-    <select name="time">
-      {timeOptions.map((o) => <option value={o.value}>{pick(o.label, lang)}</option>)}
-    </select>
+  <label class="field">
+    <span class="field__label">{t('book.comment')}</span>
+    <textarea name="comment" id="book-comment" rows="3" maxlength="1000" placeholder={t('book.comment.placeholder')}></textarea>
   </label>
-
-  <label>{t('book.who')}
-    <select name="who">
-      {whoOptions.map((o) => <option value={o.value}>{pick(o.label, lang)}</option>)}
-    </select>
-  </label>
-
-  <label>{t('book.name')} <input name="name" autocomplete="name" required /></label>
-  <label>{t('book.contact')} <input name="contact" required /></label>
-  <label>{t('book.comment')} <textarea name="comment" rows="3"></textarea></label>
 
   <!-- антиспам: поле-ловушка, людям не видно -->
   <div class="sr-only" aria-hidden="true">
@@ -47,11 +96,172 @@ const { whoOptions, timeOptions } = lessons.form;
   </div>
   <input type="hidden" name="ts" value="" />
 
-  <label>
-    <input type="checkbox" name="agree" required />
-    {t('book.agree')} — <a href={localizePath('/privacy', lang)}>{t('book.policy')}</a>
+  <label class="agree">
+    <input type="checkbox" name="agree" id="book-agree" value="1" />
+    <span>{t('book.agree')}. <a href={localizePath('/privacy', lang)} target="_blank">{t('book.policy')}</a></span>
   </label>
+  <span class="field__err" data-err="agree" role="alert"></span>
 
-  <p class="muted">{t('book.note')}</p>
-  <button class="btn btn--primary" type="submit">{t('book.submit')}</button>
+  <p class="booking__note">{t('book.note')}</p>
+  <button class="btn btn--primary booking__submit" type="submit">{t('book.submit')}</button>
+
+  <div class="booking__result booking__result--ok" data-result="ok" hidden role="status">{t('book.done')}</div>
+  <div class="booking__result booking__result--fail" data-result="fail" hidden role="alert">
+    {t('book.fail')}
+    {c.telegram && <a href={`https://t.me/${c.telegram}`} target="_blank" rel="noopener">Telegram @{c.telegram}</a>}
+    {c.phone && <a href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}>{c.phone}</a>}
+  </div>
 </form>
+
+<style>
+  .booking {
+    background: var(--bg); color: var(--ink); border-radius: 14px; padding: 28px;
+    display: flex; flex-direction: column; gap: 18px; min-width: 0;
+  }
+  .booking h3 { color: var(--ink) !important; }
+  .field { display: flex; flex-direction: column; gap: 6px; border: 0; padding: 0; margin: 0; min-width: 0; }
+  .field__label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 0; margin-bottom: 2px; }
+  .field__err { color: var(--danger); font-size: 13px; min-height: 0; }
+  .field__err:empty { display: none; }
+  input:not([type='radio']):not([type='checkbox']), select, textarea {
+    font: inherit; font-size: 15px; padding: 11px 12px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%;
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  [aria-invalid='true'] { border-color: var(--danger) !important; }
+
+  /* переключатель формата */
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 3px; }
+  .seg input, .chips input, .days :global(input) { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+  .seg label { flex: 1; text-align: center; padding: 8px 10px; border-radius: 999px; cursor: pointer; font-size: 14px; color: var(--muted); }
+  .seg input:checked + label { background: var(--accent); color: var(--accent-ink); }
+
+  /* дни и время — «таблетки» */
+  .days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .days :global(label) {
+    flex: 0 0 auto; min-width: 62px; padding: 8px 6px; border-radius: 8px; border: 1px solid var(--line);
+    text-align: center; font-size: 13px; line-height: 1.3; cursor: pointer; color: var(--muted);
+  }
+  .days :global(label b) { display: block; font-size: 17px; font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .days :global(input:checked + label) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chips label { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; cursor: pointer; }
+  .chips input:checked + label { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .seg input:focus-visible + label, .chips input:focus-visible + label, .days :global(input:focus-visible + label) {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .agree { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .agree input { margin-top: 3px; accent-color: var(--accent); }
+  .booking__note { font-size: 13px; color: var(--muted); }
+  .booking__submit { align-self: flex-start; }
+  .booking__submit[disabled] { opacity: 0.7; cursor: progress; }
+  .booking__result { border-radius: 10px; padding: 14px 16px; font-size: 15px; display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .booking__result--ok { border: 1px solid var(--ok); color: var(--ok); }
+  .booking__result--fail { border: 1px solid var(--danger); }
+  .booking__result a { color: var(--accent); }
+  @media (max-width: 520px) {
+    .booking { padding: 20px; }
+    .two { grid-template-columns: 1fr; }
+    .booking__submit { align-self: stretch; }
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-booking]');
+
+  if (form) {
+    const lang = form.dataset.lang === 'en' ? 'en' : 'ru';
+    const locale = lang === 'ru' ? 'ru-RU' : 'en-GB';
+    const msg = JSON.parse(form.dataset.messages ?? '{}') as Record<string, string>;
+    const daysAhead = Number(form.dataset.daysAhead ?? 14);
+    const skip = JSON.parse(form.dataset.skip ?? '[]') as number[];
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const ok = form.querySelector<HTMLElement>('[data-result="ok"]')!;
+    const fail = form.querySelector<HTMLElement>('[data-result="fail"]')!;
+
+    // Дни: с завтрашнего на daysAhead вперёд, без выходных из skipWeekdays
+    const daysBox = form.querySelector<HTMLElement>('[data-days]')!;
+    const wd = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+    const mon = new Intl.DateTimeFormat(locale, { month: 'short' });
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const today = new Date();
+    for (let i = 1; i <= daysAhead; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      if (skip.includes(d.getDay())) continue;
+      const value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+      const id = `day-${value}`;
+      const input = Object.assign(document.createElement('input'), { type: 'radio', name: 'day', id, value });
+      const label = document.createElement('label');
+      label.htmlFor = id;
+      label.innerHTML = `${wd.format(d).replace('.', '')}<b>${d.getDate()}</b>${mon.format(d).replace('.', '')}`;
+      daysBox.append(input, label);
+    }
+
+    // Метка времени для антиспама: заполнение быстрее нескольких секунд — бот
+    const stamp = () => (form.querySelector<HTMLInputElement>('[name="ts"]')!.value = String(Math.floor(Date.now() / 1000)));
+    stamp();
+
+    const setError = (field: string, text: string) => {
+      const el = form.querySelector<HTMLElement>(`[data-err="${field}"]`);
+      if (el) el.textContent = text;
+      const input = form.querySelector<HTMLInputElement>(`[name="${field}"]:not([type="radio"])`);
+      if (input) input.setAttribute('aria-invalid', text ? 'true' : 'false');
+    };
+
+    // Ошибка у поля пропадает, как только его начали исправлять
+    form.addEventListener('input', (e) => {
+      const name = (e.target as HTMLInputElement).name;
+      if (name) setError(name, '');
+    });
+    form.addEventListener('change', (e) => {
+      const name = (e.target as HTMLInputElement).name;
+      if (name) setError(name, '');
+    });
+
+    const isPhone = (v: string) => /^\+?[\d\s\-()]{10,20}$/.test(v) && v.replace(/\D/g, '').length >= 10;
+    const isTelegram = (v: string) => /^@[A-Za-z0-9_]{5,32}$/.test(v);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok.hidden = true;
+      fail.hidden = true;
+
+      const data = new FormData(form);
+      const contact = String(data.get('contact') ?? '').trim();
+      const errors: Record<string, string> = {};
+      if (!data.get('day')) errors.day = msg.day;
+      if (!String(data.get('name') ?? '').trim()) errors.name = msg.name;
+      if (!isPhone(contact) && !isTelegram(contact)) errors.contact = msg.contact;
+      if (!data.get('agree')) errors.agree = msg.agree;
+
+      for (const f of ['day', 'name', 'contact', 'agree']) setError(f, errors[f] ?? '');
+      const firstBad = Object.keys(errors)[0];
+      if (firstBad) {
+        const target = firstBad === 'day'
+          ? daysBox.querySelector<HTMLInputElement>('input')
+          : form.querySelector<HTMLInputElement>(`[name="${firstBad}"]`);
+        target?.focus();
+        return;
+      }
+
+      submit.disabled = true;
+      submit.textContent = msg.sending;
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const json = await res.json().catch(() => ({ ok: false }));
+        if (!res.ok || !json.ok) throw new Error(json.error ?? `HTTP ${res.status}`);
+        ok.hidden = false;
+        form.reset();
+        stamp();
+        // TODO (этап 7): цель Яндекс.Метрики «Отправлена заявка»
+      } catch {
+        fail.hidden = false;
+      } finally {
+        submit.disabled = false;
+        submit.textContent = msg.submit;
+      }
+    });
+  }
+</script>

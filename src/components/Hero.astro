@@ -1,23 +1,99 @@
 ---
-// Первый экран: заголовок, лид, две кнопки, ближайший концерт, портрет.
-// TODO (этап 3): портрет через <Image> из src/assets/portrait/, вёрстка из прототипа.
+// Первый экран: подпись, заголовок, лид, две кнопки, ближайший концерт, портрет.
+// Портрет — первый файл из src/assets/portrait/ (jpg/png/webp). Нет файла — заглушка.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import site from '../data/site.json';
 import type { Concert } from '../lib/concerts';
+import { demoPortrait, unsplashUrl, unsplashSrcset } from '../lib/demo-photos';
 
 interface Props { lang: Lang; next?: Concert }
 const { lang, next } = Astro.props;
 const t = useTranslations(lang);
+const name = pick(site.name, lang);
+
+const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/portrait/*.{jpg,jpeg,png,webp}', { eager: true });
+const portrait = Object.values(portraits)[0]?.default;
+
+const nextDate = next
+  ? new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long' })
+      .format(new Date(`${next.date}T12:00:00`))
+  : '';
 ---
 <section class="section hero">
-  <div class="wrap">
-    <div class="eyebrow">{t('hero.eyebrow')}</div>
-    <h1>{pick(site.tagline, lang)}</h1>
-    <p class="muted">{pick(site.lead, lang)}</p>
-    <p>
-      <a class="btn btn--primary" href="#lessons">{t('hero.ctaLessons')}</a>
-      <a class="btn" href="#concerts">{t('hero.ctaConcerts')}</a>
-    </p>
-    {next && <p class="muted">{t('hero.next')}: {next.date}, {next.city}, {next.venue}</p>}
+  <div class="wrap hero__grid">
+    <div class="hero__text">
+      <div class="eyebrow">{t('hero.eyebrow')}</div>
+      <h1>{pick(site.tagline, lang)}</h1>
+      <p class="hero__lead">{pick(site.lead, lang)}</p>
+      <div class="hero__actions">
+        <a class="btn btn--primary" href="#lessons">{t('hero.ctaLessons')}</a>
+        <a class="btn" href="#concerts">{t('hero.ctaConcerts')}</a>
+      </div>
+      {next && (
+        <a class="hero__next" href="#concerts">
+          <span class="eyebrow">{t('hero.next')}</span>
+          <span><strong>{nextDate}</strong> · {next.city}, {next.venue}</span>
+        </a>
+      )}
+    </div>
+
+    <div class="hero__portrait">
+      {portrait ? (
+        <Image
+          src={portrait}
+          alt={name}
+          widths={[480, 720, 960, 1280]}
+          sizes="(max-width: 820px) 100vw, 45vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : demoPortrait ? (
+        <img
+          src={unsplashUrl(demoPortrait.id, 960)}
+          srcset={unsplashSrcset(demoPortrait.id, [480, 720, 960, 1280])}
+          sizes="(max-width: 820px) 100vw, 45vw"
+          alt={name}
+          fetchpriority="high"
+        />
+      ) : (
+        <div class="hero__placeholder" role="img" aria-label={name}>
+          <svg viewBox="0 0 100 220" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+            <path d="M50 4v58" /><rect x="45" y="2" width="10" height="16" rx="5" />
+            <path d="M50 62c-16 0-26 10-26 24 0 9 6 14 6 20s-10 12-10 30c0 26 16 44 30 44s30-18 30-44c0-18-10-24-10-30s6-11 6-20c0-14-10-24-26-24z" />
+            <path d="M38 118c-4 6-4 12 0 18M62 118c4 6 4 12 0 18" /><path d="M42 160h16" /><path d="M47 62v98M53 62v98" />
+          </svg>
+        </div>
+      )}
+    </div>
   </div>
 </section>
+
+<style>
+  .hero { padding-block: 56px 72px; }
+  .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+  .hero__text { min-width: 0; }
+  .hero h1 { margin-top: 18px; letter-spacing: -0.01em; }
+  .hero__lead { font-size: 19px; color: var(--muted); max-width: 32ch; margin-top: 20px; }
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__next {
+    margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline;
+    font-size: 15px; text-decoration: none;
+  }
+  .hero__next strong { font-weight: 500; }
+  .hero__next:hover span:last-child { text-decoration: underline; text-underline-offset: 3px; }
+
+  .hero__portrait { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
+  .hero__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .hero__placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--muted); }
+  .hero__placeholder svg { width: 40%; height: auto; opacity: 0.5; }
+
+  @media (max-width: 820px) {
+    .hero { padding-block: 40px 56px; }
+    .hero__grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero__portrait { aspect-ratio: 4 / 3; }
+    .hero__lead { font-size: 17px; }
+  }
+</style>

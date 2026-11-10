@@ -8,6 +8,8 @@ const SITE = 'https://example-violin.ru';
 export default defineConfig({
   site: SITE,
   trailingSlash: 'ignore',
+  // Порт можно переопределить переменной PORT (так делает превью в редакторе)
+  server: { host: '127.0.0.1', port: Number(process.env.PORT) || 4321 },
   build: { format: 'directory' },
 
   // Русский — основной язык (без префикса), английский — /en/

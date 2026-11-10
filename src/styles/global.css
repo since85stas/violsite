@@ -16,6 +16,7 @@
   --display: 'Prata', 'Times New Roman', Georgia, serif;
   --body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
+  --header-h: 64px;
   --maxw: 1080px;
   --gutter: 16px;
   --section: 72px;
@@ -67,11 +68,15 @@ p { margin: 0; }
   padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
 }
 .section { padding-block: var(--section); }
+/* якорные переходы не прячут заголовок секции под закреплённой шапкой */
+[id] { scroll-margin-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); }
 .section--soft { background: var(--soft); }
 .section--warm { background: var(--warm); color: var(--warm-ink); }
 .sec-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; max-width: 640px; }
 .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .muted { color: var(--muted); }
+/* нотный стан — разделитель между первым экраном и разделами */
+.staff { height: 17px; background: repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 4px); }
 .todo { border: 1px dashed var(--line); border-radius: 6px; padding: 24px; color: var(--muted); font-size: 14px; }
 
 .btn {

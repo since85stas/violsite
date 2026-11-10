@@ -1,19 +1,89 @@
 ---
-// Видео: превью YouTube, плеер подгружается по клику (lite-embed).
-// TODO (этап 3): карточки из прототипа + src/scripts/video.ts
+// Видео: карточки с обложкой; плеер подгружается по клику (YouTube / Rutube / VK).
 import { type Lang, useTranslations, pick } from '../i18n/ui';
-import videos from '../data/videos.json';
+import { allVideos, embedUrl, watchUrl, posterUrl, providerName } from '../lib/video';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 ---
-<section class="section" id="media">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="eyebrow">{t('media.eyebrow')}</div>
-      <h2>{t('media.title')}</h2>
+{allVideos.length > 0 && (
+  <section class="section" id="media">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">{t('media.eyebrow')}</div>
+        <h2>{t('media.title')}</h2>
+      </div>
+      <div class="videos">
+        {allVideos.map((v) => {
+          const title = pick(v.title, lang);
+          const poster = posterUrl(v);
+          return (
+            <article class="video">
+              <div class="video__frame">
+                <button
+                  class="video__play"
+                  type="button"
+                  data-embed={embedUrl(v)}
+                  data-title={title}
+                  aria-label={`${t('media.play')}: ${title}`}
+                >
+                  {poster && <img src={poster} alt="" loading="lazy" decoding="async" />}
+                  <span class="video__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+                  </span>
+                </button>
+              </div>
+              <h3 class="video__title">{title}</h3>
+              <p class="video__meta">
+                {pick(v.meta, lang)} ·{' '}
+                <a href={watchUrl(v)} target="_blank" rel="noopener">{providerName(v.provider, lang)}</a>
+              </p>
+            </article>
+          );
+        })}
+      </div>
     </div>
-    <ul>{videos.items.map((v) => <li>{pick(v.title, lang)} <span class="muted">{pick(v.meta, lang)}</span></li>)}</ul>
-  </div>
-</section>
+  </section>
+)}
+
+<style>
+  .videos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .video { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .video__frame { aspect-ratio: 16 / 9; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
+  .video__frame :global(iframe) { width: 100%; height: 100%; border: 0; display: block; }
+  .video__play {
+    position: relative; width: 100%; height: 100%; padding: 0; border: 0; cursor: pointer;
+    background: transparent; color: var(--ink); display: grid; place-items: center;
+  }
+  .video__play img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .video__icon {
+    position: relative; width: 56px; height: 56px; border-radius: 50%;
+    display: grid; place-items: center; padding-left: 3px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent); color: var(--ink);
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .video__play:hover .video__icon { transform: scale(1.08); background: var(--accent); color: var(--accent-ink); }
+  .video__title { font-family: var(--body); font-size: 15px; font-weight: 500; line-height: 1.4; }
+  .video__meta { font-size: 13px; color: var(--muted); }
+  .video__meta a { color: inherit; }
+  @media (max-width: 820px) { .videos { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .videos { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .video__icon { transition: none; } }
+</style>
+
+<script>
+  // По клику заменяем обложку на плеер площадки
+  document.querySelectorAll<HTMLButtonElement>('.video__play').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = btn.dataset.embed ?? '';
+      iframe.title = btn.dataset.title ?? '';
+      iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      btn.replaceWith(iframe);
+      iframe.focus();
+    });
+  });
+</script>
