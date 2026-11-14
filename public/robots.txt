@@ -1,5 +1,0 @@
-User-agent: *
-Disallow: /api/
-
-# TODO: заменить домен перед запуском
-Sitemap: https://example-violin.ru/sitemap-index.xml

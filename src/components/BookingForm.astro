@@ -87,20 +87,20 @@ const texts = {
 
   <div class="booking__actions">
     {waDigits && (
-      <a class="btn btn--primary" href={`https://wa.me/${waDigits}`} target="_blank" rel="noopener" data-send="whatsapp" data-goal="lesson_whatsapp">
+      <a class="btn btn--primary" href={`https://wa.me/${waDigits}`} target="_blank" rel="noopener" data-send="whatsapp">
         {t('book.whatsapp')}
       </a>
     )}
     {tgUser && (
-      <a class:list={['btn', !waDigits && 'btn--primary']} href={`https://t.me/${tgUser}`} target="_blank" rel="noopener" data-send="telegram" data-goal="lesson_telegram">
+      <a class:list={['btn', !waDigits && 'btn--primary']} href={`https://t.me/${tgUser}`} target="_blank" rel="noopener" data-send="telegram">
         {t('book.telegram')}
       </a>
     )}
-    <button class="btn btn--ghost" type="button" data-copy data-goal="lesson_copy">{t('book.copy')}</button>
+    <button class="btn btn--ghost" type="button" data-copy>{t('book.copy')}</button>
   </div>
 
   {phoneHref && (
-    <p class="booking__call">{t('book.call')}: <a href={phoneHref} data-goal="lesson_call">{c.phone}</a></p>
+    <p class="booking__call">{t('book.call')}: <a href={phoneHref}>{c.phone}</a></p>
   )}
   <p class="booking__note">{t('book.note')} {t('book.privacy')}</p>
 </form>
@@ -231,6 +231,5 @@ const texts = {
       setTimeout(() => (copyBtn.textContent = tx.copy), 2000);
     });
 
-    // Клики по кнопкам с data-goal считает общий счётчик в Base.astro (/api/hit.php)
   }
 </script>

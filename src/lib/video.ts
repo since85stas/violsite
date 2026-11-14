@@ -8,6 +8,7 @@
 import videos from '../data/videos.json';
 import sample from '../data/videos.sample.json';
 import type { Localized } from '../i18n/ui';
+import { withBase } from './url';
 
 export type VideoProvider = 'youtube' | 'rutube' | 'vk';
 
@@ -46,7 +47,7 @@ export function watchUrl(v: Video): string {
 
 /** Обложка: своя из public/ или превью площадки. Для VK без своей обложки — пусто (будет заглушка). */
 export function posterUrl(v: Video): string {
-  if (v.poster) return v.poster;
+  if (v.poster) return withBase(v.poster);
   switch (v.provider) {
     case 'youtube': return `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
     case 'rutube': return `https://rutube.ru/api/video/${v.id}/thumbnail/?redirect=1`;

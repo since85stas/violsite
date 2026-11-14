@@ -1,3 +1,5 @@
+import { withBase } from '../lib/url';
+
 // Тексты интерфейса на двух языках.
 // Содержимое (биография, цены, отзывы) — в src/data/*.json.
 
@@ -186,10 +188,10 @@ export function useTranslations(lang: Lang) {
   return (key: UiKey) => ui[lang][key] ?? ui[defaultLang][key];
 }
 
-/** Путь страницы на нужном языке: ('/privacy', 'en') → '/en/privacy' */
+/** Путь страницы на нужном языке с префиксом сайта: ('/privacy', 'en') → '/en/privacy' (или '/site/en/privacy') */
 export function localizePath(path: string, lang: Lang) {
   const clean = path.startsWith('/') ? path : `/${path}`;
-  return lang === defaultLang ? clean : `/${lang}${clean === '/' ? '/' : clean}`;
+  return withBase(lang === defaultLang ? clean : `/${lang}${clean === '/' ? '/' : clean}`);
 }
 
 /** Выбор значения из двуязычного поля { ru, en } в данных */

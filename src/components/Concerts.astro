@@ -1,8 +1,9 @@
 ---
 // Афиша: вкладки «Предстоящие / Прошедшие», карточки концертов, JSON-LD MusicEvent.
-// Списки рендерятся при сборке (SEO, работа без JS). В браузере скрипт запрашивает
-// /api/concerts.php и, если таблица изменилась, перерисовывает списки; если API
-// недоступно — просто переносит в «Прошедшие» концерты, дата которых уже наступила.
+// Списки рендерятся при сборке (SEO, работа без JS). В браузере скрипт скачивает
+// опубликованную Google Таблицу (CSV) тем же разборщиком и перерисовывает списки;
+// если таблица недоступна — остаётся версия со сборки, а прошедшие концерты
+// переносятся в «Прошедшие» по сегодняшней дате.
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import { CONCERT_TYPES, type Concert } from '../lib/concerts';
 import site from '../data/site.json';
@@ -28,6 +29,9 @@ const lists = [
   { id: 'past', label: t('concerts.past'), items: past.slice(0, PAST_LIMIT), empty: t('concerts.pastEmpty') },
 ] as const;
 
+// Ссылка на опубликованную таблицу — она и так публичная. Локальный файл (для проверки) в браузер не отдаём.
+const csvUrl = /^https?:\/\//i.test(import.meta.env.CONCERTS_CSV_URL ?? '') ? import.meta.env.CONCERTS_CSV_URL : '';
+
 // Тексты для перерисовки в браузере
 const labels = {
   locale,
@@ -51,7 +55,7 @@ const jsonLd = upcoming.map((c) => ({
   ...(c.ticketsUrl && { offers: { '@type': 'Offer', url: c.ticketsUrl, availability: 'https://schema.org/InStock' } }),
 }));
 ---
-<section class="section section--soft" id="concerts" data-concerts data-labels={JSON.stringify(labels)}>
+<section class="section section--soft" id="concerts" data-concerts data-labels={JSON.stringify(labels)} data-csv={csvUrl || undefined}>
   <div class="wrap">
     <div class="sec-head">
       <div class="eyebrow">{t('concerts.eyebrow')}</div>
@@ -91,7 +95,7 @@ const jsonLd = upcoming.map((c) => ({
                 <div class="concert__meta">
                   <span class="pill">{t(`concerts.type.${c.type}`)}</span>
                   {c.ticketsUrl && (
-                    <a class="btn concert__tickets" data-goal="tickets" href={c.ticketsUrl} target="_blank" rel="noopener">{t('concerts.tickets')}</a>
+                    <a class="btn concert__tickets" href={c.ticketsUrl} target="_blank" rel="noopener">{t('concerts.tickets')}</a>
                   )}
                 </div>
               </li>
@@ -142,7 +146,9 @@ const jsonLd = upcoming.map((c) => ({
 </style>
 
 <script>
-  interface Concert { date: string; time: string; city: string; venue: string; program: string; type: string; ticketsUrl: string }
+  import { parseCsv, rowsToConcerts } from '../lib/concerts-csv';
+  import type { Concert } from '../lib/concerts';
+
   interface Labels { locale: string; pastLimit: number; tickets: string; types: Record<string, string> }
 
   const section = document.querySelector<HTMLElement>('[data-concerts]');
@@ -211,7 +217,6 @@ const jsonLd = upcoming.map((c) => ({
       meta.append(el('span', 'pill', labels.types[c.type] ?? labels.types.other));
       if (/^https?:\/\//i.test(c.ticketsUrl)) {
         const a = el('a', 'btn concert__tickets', labels.tickets) as HTMLAnchorElement;
-        a.dataset.goal = 'tickets';
         a.href = c.ticketsUrl;
         a.target = '_blank';
         a.rel = 'noopener';
@@ -235,12 +240,17 @@ const jsonLd = upcoming.map((c) => ({
     stale.reverse().forEach((li) => pastList.prepend(li));
     updateEmpty();
 
-    // Затем: свежие данные из таблицы (кэш на хостинге — 15 минут)
-    fetch('/api/concerts.php', { headers: { Accept: 'application/json' } })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data?.ok && Array.isArray(data.concerts)) render(data.concerts as Concert[]);
-      })
-      .catch(() => { /* API недоступно — остаётся версия со сборки */ });
+    // Затем: свежие данные прямо из опубликованной таблицы
+    const csv = section.dataset.csv;
+    if (csv) {
+      fetch(csv, { signal: AbortSignal.timeout(8000) })
+        .then((r) => (r.ok ? r.text() : Promise.reject(new Error(`HTTP ${r.status}`))))
+        .then((text) => {
+          const rows = parseCsv(text);
+          // Не таблица (например, страница ошибки Google) — не трогаем версию со сборки
+          if (rows.length > 0 && rows[0].length >= 3) render(rowsToConcerts(rows));
+        })
+        .catch(() => { /* таблица недоступна — остаётся версия со сборки */ });
+    }
   }
 </script>

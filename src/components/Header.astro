@@ -68,7 +68,8 @@ const links = [
     border-bottom: 1px solid var(--line);
   }
   .header__inner { display: flex; align-items: center; gap: 24px; min-height: var(--header-h); }
-  .header__logo { font-family: var(--display); font-size: 20px; text-decoration: none; white-space: nowrap; margin-right: auto; }
+  .header__logo { font-family: var(--display); font-size: 23px; line-height: 1; color: var(--accent); text-decoration: none; white-space: nowrap; margin-right: auto; }
+  .header__logo:hover { opacity: 0.85; }
 
   .header__links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
   .header__links a, .header__lang { text-decoration: none; color: var(--muted); }
@@ -118,7 +119,7 @@ const links = [
   }
   @media (max-width: 520px) {
     .header__cta { display: none; }
-    .header__logo { font-size: 18px; }
+    .header__logo { font-size: 20px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .header__burger-lines, .header__burger-lines::before, .header__burger-lines::after { transition: none; }

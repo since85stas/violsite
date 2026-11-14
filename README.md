@@ -6,15 +6,16 @@
 - План и статус: [`docs/plan.md`](docs/plan.md)
 - Что запросить у заказчика: [`docs/content-checklist.md`](docs/content-checklist.md)
 - Таблица концертов: [`docs/concerts-sheet.md`](docs/concerts-sheet.md)
-- Статистика посещений (свой счётчик без кук): [`docs/stats.md`](docs/stats.md)
 
 ## Стек
 
 - [Astro](https://astro.build) 7 — статическая сборка, i18n (`/` — RU, `/en/` — EN), sitemap
 - Шрифты Prata и Golos Text — локально через Fontsource
-- PHP 8 на хостинге — `public/api/`: кэш таблицы концертов и свой счётчик посещений
+- Хостинг — **GitHub Pages** (бесплатно, только статика, без серверного кода)
+- Концерты — опубликованная Google Таблица: вшиваются при сборке и обновляются в браузере
 - Запись на уроки — через WhatsApp и Telegram с готовым текстом, сайт данные не собирает
-- GitHub Actions — сборка и деплой по rsync
+- Аналитика — Яндекс.Вебмастер, Google Search Console, Яндекс.Бизнес (без счётчиков на сайте)
+- GitHub Actions — сборка и деплой на Pages
 
 ## Запуск
 
@@ -22,13 +23,20 @@
 
 ```bash
 npm install
-npm run dev      # http://localhost:4321
+npm run dev      # http://127.0.0.1:4321
 npm run build    # сборка в dist/
 npm run preview  # просмотр собранного сайта
 ```
 
 Переменные окружения — в `.env` (образец: `.env.example`).
-PHP-скрипты локально не запускаются через `astro dev`; для их проверки нужен PHP (`php -S localhost:8000 -t dist`).
+
+Сборка «как на GitHub Pages без своего домена» (с префиксом `/site/`):
+
+```bash
+SITE_URL=https://login.github.io BASE_PATH=/site npm run build
+```
+
+В Git Bash на Windows перед командой добавьте `MSYS_NO_PATHCONV=1`, иначе `/site` превратится в путь Windows.
 
 ## Структура
 
@@ -38,16 +46,17 @@ src/
   data/            содержимое сайта в JSON, поля на двух языках { "ru": …, "en": … }
   i18n/ui.ts       тексты интерфейса и помощники для языков
   layouts/         общий <head>, шапка, подвал
-  lib/concerts.ts  загрузка концертов из Google Таблицы при сборке
-  pages/           маршруты: /, /en/, /privacy, /en/privacy, 404
-  scripts/         (пусто — клиентский JS внутри компонентов)
+  lib/             концерты (загрузка и разбор CSV), галерея, видео, url.ts — префикс адреса
+  pages/           маршруты: /, /en/, /privacy, /en/privacy, 404, robots.txt
   styles/          дизайн-токены и базовые стили
   assets/          исходные фото (Astro сожмёт их сам)
 public/
-  api/             PHP: concerts.php, lead.php, config.example.php
   files/           PDF: пресс-кит, репертуар
-docs/              план, чек-листы, прототип
+docs/              план, чек-листы, прототип, тестовая таблица концертов
 ```
+
+Все внутренние ссылки строятся через `localizePath()` / `withBase()` — так сайт работает
+и по адресу `login.github.io/site/`, и на своём домене. Не пишите в коде пути вида `href="/…"` напрямую.
 
 ## Где что менять
 
@@ -55,19 +64,34 @@ docs/              план, чек-листы, прототип
 |---|---|
 | Имя, контакты, соцсети, SEO-описание | `src/data/site.json` |
 | Биография и цифры | `src/data/about.json` |
-| Аудитории, цены, варианты в форме | `src/data/lessons.json` |
+| Аудитории, цены, варианты для записи | `src/data/lessons.json` |
 | Видео | `src/data/videos.json` |
 | Фото галереи | `src/assets/gallery/` + `src/data/gallery.json` |
 | Отзывы | `src/data/reviews.json` |
 | Тексты кнопок и меню | `src/i18n/ui.ts` |
 | Концерты | Google Таблица (не в коде) |
 
-## Деплой
+## Деплой на GitHub Pages
 
-1. На хостинге: PHP 8, SSL, папка сайта. Создать `api/config.php` из `api/config.example.php`.
-2. В GitHub → Settings → Secrets and variables → Actions:
-   - секреты `SSH_HOST`, `SSH_USER`, `SSH_KEY` (приватный ключ), `SSH_PATH` (папка сайта на хостинге);
-   - переменные `CONCERTS_CSV_URL`, `DEPLOY_ENABLED=true`.
-3. Пуш в `main` → сборка → rsync на хостинг. Плюс ночная пересборка для свежей афиши.
+1. Репозиторий на GitHub — **публичный** (на бесплатном тарифе Pages работает только с публичными).
+2. **Settings → Pages → Source: GitHub Actions.**
+3. **Settings → Secrets and variables → Actions → Variables:** `CONCERTS_CSV_URL` — ссылка на опубликованную таблицу.
+4. Пуш в `main` → сборка → публикация. Сайт будет по адресу `https://<логин>.github.io/<репозиторий>/`.
+   Плюс ночная пересборка (03:00 МСК) и кнопка **Actions → Build and deploy → Run workflow**.
 
-`config.php` и кэш концертов живут только на хостинге и не перезаписываются деплоем.
+Адрес и префикс сборка получает сама (`actions/configure-pages`), вручную ничего задавать не нужно.
+
+### Свой домен
+
+1. **Settings → Pages → Custom domain** — вписать домен (например, `shpagina.ru`).
+2. У регистратора — DNS-записи:
+   - для `shpagina.ru`: A-записи `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`;
+   - для `www.shpagina.ru`: CNAME на `<логин>.github.io`.
+3. Дождаться обновления DNS, включить **Enforce HTTPS**.
+4. Подтвердить домен в настройках аккаунта: **Settings → Pages → Verified domains**.
+5. Пересобрать сайт (Run workflow) — ссылки станут от корня домена.
+
+### Если GitHub Pages плохо открывается в России
+
+Сайт полностью статический: папку `dist/` можно выложить на любой хостинг (Beget, Timeweb и т.п.)
+без изменений в коде. Тогда в workflow нужно заменить шаги публикации на загрузку по SFTP/rsync.

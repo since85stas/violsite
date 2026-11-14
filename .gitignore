@@ -7,11 +7,6 @@ dist/
 .env
 .env.*
 !.env.example
-public/api/config.php
-
-# данные, которые PHP пишет на хостинге
-public/api/cache/*
-!public/api/cache/.htaccess
 
 # системное
 .DS_Store

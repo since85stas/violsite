@@ -8,6 +8,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { type Lang, localizePath, pick } from '../i18n/ui';
 import site from '../data/site.json';
+import { withBase } from '../lib/url';
 
 interface Props {
   lang: Lang;
@@ -35,15 +36,14 @@ const altEn = new URL(localizePath(path, 'en'), Astro.site);
     <link rel="alternate" hreflang="ru" href={altRu} />
     <link rel="alternate" hreflang="en" href={altEn} />
     <link rel="alternate" hreflang="x-default" href={altRu} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/og-image.jpg', Astro.site)} />
-    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
+    <meta property="og:image" content={new URL(withBase('/og-image.jpg'), Astro.site)} />    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : 'en_US'} />
 
     <slot name="head" />
   </head>
@@ -53,30 +53,5 @@ const altEn = new URL(localizePath(path, 'en'), Astro.site);
       <slot />
     </main>
     <Footer lang={lang} />
-
-    <script>
-      // Свой счётчик (/api/hit.php): просмотр страницы и клики по элементам с data-goal.
-      // Без кук и идентификаторов — сервер только прибавляет единицу к суммам за день.
-      const local = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-      const send = (data: Record<string, string>) => {
-        if (local) return;
-        const body = new URLSearchParams(data);
-        if (!navigator.sendBeacon?.('/api/hit.php', body)) {
-          fetch('/api/hit.php', { method: 'POST', body, keepalive: true }).catch(() => {});
-        }
-      };
-
-      let ref = '';
-      try {
-        const host = document.referrer ? new URL(document.referrer).hostname : '';
-        if (host !== location.hostname) ref = host; // только домен, без пути и параметров
-      } catch { /* неверный referrer — считаем прямым заходом */ }
-      send({ t: 'view', p: location.pathname, r: ref });
-
-      document.addEventListener('click', (e) => {
-        const el = (e.target as Element | null)?.closest<HTMLElement>('[data-goal]');
-        if (el?.dataset.goal) send({ t: 'click', p: location.pathname, e: el.dataset.goal });
-      });
-    </script>
   </body>
 </html>

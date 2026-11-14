@@ -1,5 +1,6 @@
-// Разбор CSV из Google Таблицы концертов. Та же логика продублирована в public/api/concerts.php —
-// при изменении правил меняйте оба места. Формат таблицы — docs/concerts-sheet.md
+// Разбор CSV из Google Таблицы концертов.
+// Используется и при сборке (src/lib/concerts.ts), и в браузере (Concerts.astro).
+// Формат таблицы — docs/concerts-sheet.md
 
 import type { Concert, ConcertType } from './concerts';
 

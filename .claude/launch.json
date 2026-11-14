@@ -7,6 +7,13 @@
       "runtimeArgs": ["run", "dev"],
       "port": 4321,
       "url": "http://127.0.0.1:4321"
+    },
+    {
+      "name": "pages-preview",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "set BASE_PATH=/site&& set SITE_URL=https://login.github.io&& npx astro preview --port 4330"],
+      "port": 4330,
+      "url": "http://127.0.0.1:4330"
     }
   ]
 }
