@@ -1,0 +1,47 @@
+---
+// Разметка schema.org для поисковиков: кто такая Елена (Person) и что она предлагает (уроки — Service).
+// Концерты (MusicEvent) размечаются отдельно в Concerts.astro.
+import { type Lang, localizePath, pick } from '../i18n/ui';
+import site from '../data/site.json';
+import lessons from '../data/lessons.json';
+import { withBase } from '../lib/url';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const home = new URL(localizePath('/', lang), Astro.site).href;
+const personId = `${new URL(withBase('/'), Astro.site).href}#person`;
+const other: Lang = lang === 'ru' ? 'en' : 'ru';
+
+const sameAs = Object.values(site.social).filter(Boolean);
+if (site.contacts.telegram) sameAs.push(`https://t.me/${site.contacts.telegram.replace(/^@/, '')}`);
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': personId,
+  name: pick(site.name, lang),
+  alternateName: pick(site.name, other),
+  jobTitle: lang === 'ru' ? 'Скрипачка, педагог' : 'Violinist, violin teacher',
+  url: home,
+  image: new URL(withBase('/og-image.jpg'), Astro.site).href,
+  knowsAbout: lang === 'ru' ? ['Скрипка', 'Классическая музыка', 'Уроки скрипки'] : ['Violin', 'Classical music', 'Violin lessons'],
+  ...(sameAs.length > 0 && { sameAs }),
+};
+
+const offers = lessons.prices
+  .filter((p) => p.price > 0)
+  .map((p) => ({ '@type': 'Offer', name: pick(p.label, lang), price: p.price, priceCurrency: p.currency }));
+
+const service = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: lang === 'ru' ? 'Уроки скрипки' : 'Violin lessons',
+  name: lang === 'ru' ? `Уроки скрипки — ${pick(site.name, lang)}` : `Violin lessons with ${pick(site.name, lang)}`,
+  provider: { '@id': personId },
+  areaServed: [{ '@type': 'City', name: pick(site.seo.city, lang) }, lang === 'ru' ? 'Онлайн' : 'Online'],
+  availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${home}#lessons` },
+  audience: { '@type': 'Audience', audienceType: lang === 'ru' ? 'Дети от 5 лет и взрослые' : 'Children from 5 and adults' },
+  ...(offers.length > 0 && { offers }),
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify([person, service]).replace(/</g, '\\u003c')} />

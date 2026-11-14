@@ -9,6 +9,7 @@ import Gallery from './Gallery.astro';
 import Lessons from './Lessons.astro';
 import Reviews from './Reviews.astro';
 import Organizers from './Organizers.astro';
+import SeoJsonLd from './SeoJsonLd.astro';
 import { type Lang } from '../i18n/ui';
 import { loadConcerts, splitByDate } from '../lib/concerts';
 
@@ -17,6 +18,7 @@ const { lang } = Astro.props;
 const { upcoming, past } = splitByDate(await loadConcerts());
 ---
 <Base lang={lang} path="/">
+  <SeoJsonLd slot="head" lang={lang} />
   <Hero lang={lang} next={upcoming[0]} />
   <div class="wrap" aria-hidden="true"><div class="staff"></div></div>
   <About lang={lang} />

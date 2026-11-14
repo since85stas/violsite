@@ -10,11 +10,22 @@
     "en": "TODO: 1–2 sentences about concerts and lessons"
   },
   "seo": {
-    "title": { "ru": "Елена Шпагина — скрипка: концерты и уроки", "en": "Elena Shpagina — violinist: concerts and lessons" },
+    "title": {
+      "ru": "Елена Шпагина — скрипачка. Концерты и уроки скрипки",
+      "en": "Elena Shpagina — violinist. Concerts and violin lessons"
+    },
     "description": {
-      "ru": "TODO: описание для поисковиков (до 160 символов)",
-      "en": "TODO: search description (up to 160 characters)"
-    }
+      "ru": "Скрипачка Елена Шпагина: афиша концертов, видео и уроки скрипки для детей и взрослых — в студии и онлайн в Zoom. Пробный урок.",
+      "en": "Violinist Elena Shpagina: concert schedule, videos and violin lessons for children and adults — in the studio or online via Zoom."
+    },
+    "_city_comment": "Город для поисковиков (уроки «в городе»). TODO: подтвердить у Елены.",
+    "city": { "ru": "Москва", "en": "Moscow" }
+  },
+  "privacy": {
+    "_comment": "Для страницы политики конфиденциальности. TODO: заполнить и показать текст юристу.",
+    "operator": { "ru": "TODO: ФИО полностью и статус (физлицо / самозанятая / ИП, ИНН)", "en": "TODO: full name and legal status" },
+    "email": "privacy@example.ru",
+    "updated": "2026-11-15"
   },
   "contacts": {
     "phone": "+7 900 000-00-00",

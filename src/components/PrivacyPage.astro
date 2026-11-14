@@ -1,19 +1,63 @@
 ---
-// Политика обработки персональных данных.
-// TODO (этап 6): текст по 152-ФЗ (оператор, цели, состав данных, сроки хранения, права субъекта,
-// контакты для запросов), согласовать с юристом. Английская версия — перевод.
+// Политика конфиденциальности. Текст — src/data/privacy.ts, данные оператора — src/data/site.json → privacy.
 import Base from '../layouts/Base.astro';
-import { type Lang, useTranslations } from '../i18n/ui';
+import { type Lang, localizePath, pick } from '../i18n/ui';
+import site from '../data/site.json';
+import { privacy } from '../data/privacy';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
-const t = useTranslations(lang);
+const text = privacy[lang];
+
+const fill = (s: string) =>
+  s
+    .replaceAll('{name}', pick(site.name, lang))
+    .replaceAll('{operator}', pick(site.privacy.operator, lang))
+    .replaceAll('{email}', site.privacy.email);
+
+// Почту делаем ссылкой: делим строку по адресу
+const withEmail = (s: string) => fill(s).split(site.privacy.email);
+const updated = new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  .format(new Date(`${site.privacy.updated}T12:00:00`));
 ---
-<Base lang={lang} path="/privacy" title={t('footer.privacy')}>
-  <section class="section">
-    <div class="wrap">
-      <h1>{t('footer.privacy')}</h1>
-      <div class="todo">TODO: текст политики</div>
+<Base lang={lang} path="/privacy" title={`${text.title} — ${pick(site.name, lang)}`} description={fill(text.intro)}>
+  <article class="section policy">
+    <div class="wrap policy__wrap">
+      <a class="policy__back" href={localizePath('/', lang)}>← {pick(site.name, lang)}</a>
+      <h1>{text.title}</h1>
+      <p class="policy__updated">{text.updated} {updated}</p>
+      <p class="policy__intro">{fill(text.intro)}</p>
+
+      {text.sections.map((s) => (
+        <section>
+          <h2>{s.title}</h2>
+          {s.paragraphs.map((p) => {
+            const parts = withEmail(p);
+            return (
+              <p>
+                {parts.map((part, i) => (
+                  <>{part}{i < parts.length - 1 && <a href={`mailto:${site.privacy.email}`}>{site.privacy.email}</a>}</>
+                ))}
+              </p>
+            );
+          })}
+          {s.list && <ul>{s.list.map((li) => <li>{fill(li)}</li>)}</ul>}
+        </section>
+      ))}
     </div>
-  </section>
+  </article>
 </Base>
+
+<style>
+  .policy__wrap { max-width: 760px; }
+  .policy__back { display: inline-block; font-size: 14px; color: var(--muted); text-decoration: none; margin-bottom: 24px; }
+  .policy__back:hover { color: var(--ink); }
+  .policy h1 { font-size: clamp(32px, 5vw, 48px); }
+  .policy__updated { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .policy__intro { font-size: 18px; margin-top: 24px; }
+  .policy section { margin-top: 36px; display: flex; flex-direction: column; gap: 12px; }
+  .policy h2 { font-size: 24px; }
+  .policy p, .policy li { max-width: 68ch; }
+  .policy ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .policy a:not(.policy__back) { color: var(--accent); }
+</style>

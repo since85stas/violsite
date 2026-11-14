@@ -9,8 +9,8 @@
 | 3 | Вёрстка из прототипа: все блоки, бургер-меню, фото, видео (YouTube/Rutube/VK), галерея | ✅ | `src/components/` |
 | 4 | Концерты из Google Таблицы: при сборке + обновление в браузере, JSON-LD | ✅ | `src/lib/concerts*.ts`, `Concerts.astro` |
 | 5 | Запись на урок через мессенджеры: готовый текст → WhatsApp / Telegram, без сбора данных на сайте | ✅ | `BookingForm.astro` |
-| 6 | Политика конфиденциальности | ⬜ | `PrivacyPage.astro` |
-| 7 | SEO: мета-теги, JSON-LD, sitemap, Вебмастер, Search Console, Яндекс.Бизнес | ⬜ | `Base.astro` |
+| 6 | Политика конфиденциальности | 🔄 текст готов; нужны ФИО/статус и почта Елены, проверка юристом | `src/data/privacy.ts`, `PrivacyPage.astro` |
+| 7 | SEO: мета-теги, JSON-LD, sitemap, Вебмастер, Search Console, Яндекс.Бизнес | 🔄 на сайте готово (Person, Service, MusicEvent, og-image, описания); подключить сервисы после публикации | `Base.astro`, `SeoJsonLd.astro`, `og-image.jpg.ts` |
 | 8 | Деплой: GitHub Pages, свой домен, HTTPS | 🔄 workflow готов, репозитория на GitHub нет | `.github/workflows/deploy.yml` |
 | 9 | Тестирование: устройства, темы, скорость, доступность из России | ⬜ | |
 | 10 | Запуск и инструкция для скрипача | ⬜ | |
