@@ -1,8 +1,14 @@
 {
-  "title": { "ru": "TODO: заголовок блока «О себе»", "en": "TODO: About headline" },
+  "title": { "ru": "От барочной аутентичности до современной сцены", "en": "From historically informed Baroque to the contemporary stage" },
   "paragraphs": {
-    "ru": ["TODO: биография, абзац 1", "TODO: биография, абзац 2"],
-    "en": ["TODO: biography, paragraph 1", "TODO: biography, paragraph 2"]
+    "ru": [
+      "Выпускница Московской государственной консерватории им. П. И. Чайковского (факультет исторического и современного исполнительского искусства). Совершенствовала мастерство игры на барочной скрипке на мастер-классах выдающихся европейских музыкантов — Марии Леонхардт, Антона Штека, Лоуренса Дуфтшмита и Синтии Робертс. Выступала под управлением Кристиана Ярви, Курта Мазура и Кшиштофа Пендерецкого на сценах Берлинской и Варшавской филармоний, Театра Елисейских полей в Париже и Театра Ла Фениче в Венеции.",
+      "Участница престижных международных проектов, среди которых Baltic Sea Philharmonic, Schleswig-Holstein Musik Festival и Miami Summer Music Festival. В России активно концертирует в составе ведущих коллективов — камерных оркестров «Kremlin», «Московская камерата», «Московская инструментальная капелла», ансамбля солистов «Эрмитаж» и МГАМДТ им. Н. И. Сац. Постоянная участница фестивалей «Musica Iberica» в Московской консерватории и «Московское барокко» в зале «Зарядье»."
+    ],
+    "en": [
+      "Elena graduated from the Tchaikovsky Moscow State Conservatory (Faculty of Historical and Contemporary Performance). She refined her Baroque violin playing in masterclasses with leading European musicians — Marie Leonhardt, Anton Steck, Lorenz Duftschmid and Cynthia Roberts. She has performed under Kristjan Järvi, Kurt Masur and Krzysztof Penderecki at the Berlin Philharmonie, the Warsaw Philharmonic, the Théâtre des Champs-Élysées in Paris and Teatro La Fenice in Venice.",
+      "She has taken part in major international projects, including the Baltic Sea Philharmonic, the Schleswig-Holstein Musik Festival and the Miami Summer Music Festival. In Russia she performs regularly with leading ensembles — the Kremlin Chamber Orchestra, Moscow Camerata, the Moscow Instrumental Capella, the Hermitage soloists ensemble and the Natalia Sats Moscow Musical Theatre. She is a regular at the Musica Iberica festival at the Moscow Conservatory and the Moscow Baroque festival at Zaryadye Hall."
+    ]
   },
   "facts": [
     { "value": "000", "label": { "ru": "концертов", "en": "concerts" } },

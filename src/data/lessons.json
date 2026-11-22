@@ -1,16 +1,16 @@
 {
   "_comment": "Уроки: аудитории, цены, варианты для формы. Пробный урок платный. Время в форме — желаемое, без проверки занятости.",
-  "title": { "ru": "TODO: заголовок раздела уроков", "en": "TODO: lessons headline" },
-  "intro": { "ru": "TODO: вводный абзац", "en": "TODO: intro paragraph" },
+  "title": { "ru": "Индивидуальные занятия по методике Московской консерватории", "en": "Private lessons in the Moscow Conservatory tradition" },
+  "intro": { "ru": "Помогаю полюбить инструмент, поставить правильную, свободную технику без зажимов и научиться слышать музыку. Программа строится индивидуально под ваши цели — от первых нот для удовольствия до подготовки к конкурсам.", "en": "I help students fall in love with the instrument, build a correct, relaxed technique free of tension, and learn to truly listen to music. Each programme is tailored to your goals — from first notes just for fun to preparing for competitions." },
   "audiences": [
     {
       "id": "kids",
       "title": { "ru": "Дети", "en": "Children" },
-      "text": { "ru": "TODO", "en": "TODO" },
+      "text": { "ru": "В игровой и бережной форме развиваем слух, чувство ритма и координацию. Помогаю с выбором первого инструмента и готовлю к поступлению в музыкальную школу.", "en": "Through play and a gentle approach we develop ear, sense of rhythm and coordination. I help choose a first instrument and prepare children for music school entrance auditions." },
       "violinSizes": ["1/16", "1/8", "1/4", "1/2", "3/4", "4/4"]
     },
-    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "TODO", "en": "TODO" } },
-    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "TODO", "en": "TODO" } }
+    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "Исполняем мечту детства без скучной зубрёжки. Уже на первых занятиях вы научитесь правильно держать смычок и сыграете свои первые мелодии.", "en": "Fulfil a childhood dream without tedious drills. From the very first lessons you will learn to hold the bow properly and play your first tunes." } },
+    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Работа над качеством звука, сложной техникой, штрихами и интерпретацией произведений. Помощь в разборе программы для студентов училищ, вузов и любителей.", "en": "Work on tone quality, advanced technique, bow strokes and interpretation. Help with preparing repertoire for music college and conservatory students, as well as amateurs." } }
   ],
   "prices": [
     { "id": "trial", "label": { "ru": "Пробный урок, 30 минут", "en": "Trial lesson, 30 min" }, "price": 0, "currency": "RUB" },

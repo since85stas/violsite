@@ -2,12 +2,12 @@
   "_comment": "Общие данные сайта. TODO: заменить заглушки реальными данными от заказчика.",
   "name": { "ru": "Елена Шпагина", "en": "Elena Shpagina" },
   "tagline": {
-    "ru": "TODO: короткая фраза для первого экрана",
-    "en": "TODO: short headline for the hero"
+    "ru": "Музыка от барокко до современности: живые концерты в лучших залах и бережное обучение игре на скрипке.",
+    "en": "Music from Baroque to today: live concerts in leading halls and patient, attentive violin teaching."
   },
   "lead": {
-    "ru": "TODO: 1–2 предложения о концертах и уроках",
-    "en": "TODO: 1–2 sentences about concerts and lessons"
+    "ru": "Выпускница Московской консерватории, участница международных фестивалей в Европе и России. Приглашаю на сольные и ансамблевые выступления в Москве, а также на индивидуальные уроки для детей и взрослых с любым уровнем подготовки.",
+    "en": "A graduate of the Moscow Conservatory who has performed at international festivals across Europe and Russia. Available for solo and ensemble performances in Moscow, and for private lessons for children and adults of any level."
   },
   "seo": {
     "title": {
