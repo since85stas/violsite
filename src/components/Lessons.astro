@@ -2,7 +2,6 @@
 // Уроки: тёплый раздел. Для кого (с размерами скрипок для детей), цены, формат занятий, форма записи.
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import lessons from '../data/lessons.json';
-import site from '../data/site.json';
 import BookingForm from './BookingForm.astro';
 
 interface Props { lang: Lang }
@@ -10,7 +9,6 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const fmt = new Intl.NumberFormat(lang === 'ru' ? 'ru-RU' : 'en-US', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
 const price = (p: number) => (p > 0 ? fmt.format(p) : t('lessons.priceOnRequest'));
-const address = [pick(site.studio.address, lang), pick(site.studio.metro, lang)].filter(Boolean).join(', ');
 ---
 <section class="section section--warm" id="lessons">
   <div class="wrap">
@@ -48,7 +46,7 @@ const address = [pick(site.studio.address, lang), pick(site.studio.metro, lang)]
 
         <h3 class="lessons-info__formats">{t('lessons.formats')}</h3>
         <ul class="formats">
-          <li><strong>{t('lessons.offline')}</strong>{address && <span> — {address}</span>}</li>
+          <li><strong>{t('lessons.offline')}</strong></li>
           <li><strong>{t('lessons.online')}</strong></li>
         </ul>
       </div>
@@ -59,7 +57,7 @@ const address = [pick(site.studio.address, lang), pick(site.studio.metro, lang)]
 </section>
 
 <style>
-  .lessons-head p, .audience p, .formats span { color: color-mix(in srgb, var(--warm-ink) 78%, transparent); }
+  .lessons-head p, .audience p { color: color-mix(in srgb, var(--warm-ink) 78%, transparent); }
   .section--warm :global(.eyebrow) { color: color-mix(in srgb, var(--warm-ink) 70%, transparent); }
   .section--warm h2, .section--warm h3 { color: var(--warm-ink); }
 

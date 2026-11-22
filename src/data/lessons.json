@@ -1,7 +1,7 @@
 {
   "_comment": "Уроки: аудитории, цены, варианты для формы. Пробный урок платный. Время в форме — желаемое, без проверки занятости.",
   "title": { "ru": "Уроки скрипки для детей и взрослых", "en": "Violin lessons for children and adults" },
-  "intro": { "ru": "Занятия индивидуальные — в студии в Москве или онлайн. Программу подбираю под цели и темп ученика. Начинаем с пробного урока на 30 минут: знакомимся, я смотрю на музыкальные данные — слух и чувство ритма. Начинающие на нём же знакомятся с нотной грамотой и делают первые шаги на инструменте.", "en": "One-to-one lessons in my Moscow studio or online. I shape the programme around each student’s goals and pace. We begin with a 30-minute trial lesson: we get to know each other and I assess musical aptitude — ear and sense of rhythm. Beginners also get a first look at reading music and take their first steps on the instrument." },
+  "intro": { "ru": "Занятия индивидуальные — очно или онлайн. Программу подбираю под цели и темп ученика. Начинаем с пробного урока на 30 минут: знакомимся, я смотрю на музыкальные данные — слух и чувство ритма. Начинающие на нём же знакомятся с нотной грамотой и делают первые шаги на инструменте.", "en": "One-to-one lessons, in person or online. I shape the programme around each student’s goals and pace. We begin with a 30-minute trial lesson: we get to know each other and I assess musical aptitude — ear and sense of rhythm. Beginners also get a first look at reading music and take their first steps on the instrument." },
   "audiences": [
     {
       "id": "kids",
