@@ -130,7 +130,8 @@ const nextDate = next
   .hero__next:hover span:last-child { text-decoration: underline; text-underline-offset: 3px; }
 
   .hero__portrait { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
-  .hero__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  /* Лицо на портрете — в верхней трети: при обрезке до 4:5 и 4:3 держим его и скрипку в кадре */
+  .hero__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
   .hero__placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--muted); }
   .hero__placeholder svg { width: 40%; height: auto; opacity: 0.5; }
 

@@ -1,25 +1,172 @@
 {
-  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. Пустой file — показывается заглушка.",
+  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. Подписи описывают то, что видно на фото; площадку и год (meta) уточнить у Елены. Пустой file — показывается заглушка.",
   "items": [
     {
-      "file": "",
-      "category": "concert",
-      "size": "wide",
-      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
-      "meta": { "ru": "Город, площадка · год", "en": "City, venue · year" }
-    },
-    {
-      "file": "",
+      "file": "portrait-01.jpg",
       "category": "portrait",
-      "size": "tall",
-      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
+      "size": "wide",
+      "caption": { "ru": "Скрипка в сосновом лесу", "en": "Violin in a pine forest" },
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "",
+      "file": "concert-01.jpg",
+      "category": "concert",
+      "size": "tall",
+      "caption": { "ru": "Концерт при свечах", "en": "Candlelight concert" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-14.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Камерный концерт в картинной галерее", "en": "Chamber concert in an art gallery" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-05.jpg",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "Портрет в красном", "en": "Portrait in red" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-11.jpg",
+      "category": "concert",
+      "size": "tall",
+      "caption": { "ru": "В историческом костюме", "en": "In historical costume" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-16.jpg",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "Трио на сцене", "en": "Trio on stage" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-02.jpg",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "Музыка в старинном интерьере", "en": "Music in a period interior" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-02.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Перед вступлением", "en": "Before the entry" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "lessons-01.jpg",
       "category": "lessons",
       "size": "",
-      "caption": { "ru": "TODO: подпись", "en": "TODO: caption" },
+      "caption": { "ru": "Работа над постановкой рук", "en": "Working on hand position" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-05.jpg",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "Ансамбль в народных костюмах", "en": "Ensemble in folk costume" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-07.jpg",
+      "category": "portrait",
+      "size": "tall",
+      "caption": { "ru": "Осенний портрет со скрипкой", "en": "Autumn portrait with the violin" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-06.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Концерт в музее", "en": "Concert at a museum" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-15.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Соло на сцене", "en": "Solo on stage" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-06.jpg",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "Летом в саду", "en": "Summer in the garden" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-03.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Барочный ансамбль", "en": "Baroque ensemble" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-08.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Солистка с камерным оркестром", "en": "Soloist with a chamber orchestra" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-03.jpg",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "В зелёном платье", "en": "In a green dress" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-10.jpg",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "Барочная программа", "en": "Baroque programme" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-07.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Скрипка и клавесин", "en": "Violin and harpsichord" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "portrait-04.jpg",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "На домашнем концерте", "en": "At a house concert" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-13.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Среди старинных портретов", "en": "Among historic portraits" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-09.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Фолк-программа", "en": "Folk programme" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-04.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "В ансамбле", "en": "In the ensemble" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-12.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Сольное выступление", "en": "Solo performance" },
       "meta": { "ru": "", "en": "" }
     }
   ]
