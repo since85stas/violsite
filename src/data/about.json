@@ -16,9 +16,9 @@
     ]
   },
   "facts": [
-    { "value": "000", "label": { "ru": "концертов", "en": "concerts" } },
-    { "value": "00", "label": { "ru": "лет преподавания", "en": "years of teaching" } },
-    { "value": "0", "label": { "ru": "фестивалей", "en": "festivals" } },
-    { "value": "00", "label": { "ru": "учеников", "en": "students" } }
+    { "value": "1000+", "label": { "ru": "концертов", "en": "concerts" } },
+    { "value": "15", "label": { "ru": "лет преподавания", "en": "years of teaching" } },
+    { "value": "100+", "label": { "ru": "фестивалей", "en": "festivals" } },
+    { "value": "50+", "label": { "ru": "учеников", "en": "students" } }
   ]
 }

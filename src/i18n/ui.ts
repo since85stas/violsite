@@ -22,6 +22,8 @@ export const ui = {
     'hero.ctaLessons': 'Записаться на пробный урок',
     'hero.ctaConcerts': 'Афиша концертов',
     'hero.next': 'Ближайший концерт',
+    'hero.quick': 'Или сразу напишите:',
+    'hero.quickMsg': 'Здравствуйте, Елена! Хочу записаться на пробный урок скрипки.',
 
     'about.eyebrow': 'О себе',
     'concerts.eyebrow': 'Афиша',
@@ -108,6 +110,8 @@ export const ui = {
     'hero.ctaLessons': 'Book a trial lesson',
     'hero.ctaConcerts': 'Upcoming concerts',
     'hero.next': 'Next concert',
+    'hero.quick': 'Or message me directly:',
+    'hero.quickMsg': 'Hello Elena! I would like to book a trial violin lesson.',
 
     'about.eyebrow': 'About',
     'concerts.eyebrow': 'Schedule',
