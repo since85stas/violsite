@@ -1,16 +1,16 @@
 {
   "_comment": "Уроки: аудитории, цены, варианты для формы. Пробный урок платный. Время в форме — желаемое, без проверки занятости.",
-  "title": { "ru": "Индивидуальные занятия по методике Московской консерватории", "en": "Private lessons in the Moscow Conservatory tradition" },
-  "intro": { "ru": "Помогаю полюбить инструмент, поставить правильную, свободную технику без зажимов и научиться слышать музыку. Программа строится индивидуально под ваши цели — от первых нот для удовольствия до подготовки к конкурсам.", "en": "I help students fall in love with the instrument, build a correct, relaxed technique free of tension, and learn to truly listen to music. Each programme is tailored to your goals — from first notes just for fun to preparing for competitions." },
+  "title": { "ru": "Уроки скрипки для детей и взрослых", "en": "Violin lessons for children and adults" },
+  "intro": { "ru": "Занятия индивидуальные — в студии в Москве или онлайн в Zoom. Программу подбираю под ваши цели и темп. Начать можно с пробного урока на 30 минут.", "en": "One-to-one lessons in my Moscow studio or online via Zoom. I shape the programme around your goals and pace. You can start with a 30-minute trial lesson." },
   "audiences": [
     {
       "id": "kids",
       "title": { "ru": "Дети", "en": "Children" },
-      "text": { "ru": "В игровой и бережной форме развиваем слух, чувство ритма и координацию. Помогаю с выбором первого инструмента и готовлю к поступлению в музыкальную школу.", "en": "Through play and a gentle approach we develop ear, sense of rhythm and coordination. I help choose a first instrument and prepare children for music school entrance auditions." },
+      "text": { "ru": "Начинаем с постановки рук, слуха и чувства ритма — через игру и короткие пьесы. Помогу подобрать скрипку по размеру.", "en": "We start with posture, ear and sense of rhythm — through games and short pieces. I can help you choose a violin of the right size." },
       "violinSizes": ["1/16", "1/8", "1/4", "1/2", "3/4", "4/4"]
     },
-    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "Исполняем мечту детства без скучной зубрёжки. Уже на первых занятиях вы научитесь правильно держать смычок и сыграете свои первые мелодии.", "en": "Fulfil a childhood dream without tedious drills. From the very first lessons you will learn to hold the bow properly and play your first tunes." } },
-    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Работа над качеством звука, сложной техникой, штрихами и интерпретацией произведений. Помощь в разборе программы для студентов училищ, вузов и любителей.", "en": "Work on tone quality, advanced technique, bow strokes and interpretation. Help with preparing repertoire for music college and conservatory students, as well as amateurs." } }
+    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "Никогда не держали скрипку — не страшно. Разберёмся, как держать инструмент и смычок, и уже на первых занятиях вы сыграете простые мелодии.", "en": "Never held a violin? No problem. We will sort out how to hold the instrument and bow, and you will play simple tunes in your first lessons." } },
+    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Для тех, кто занимался раньше. Звук, интонация, штрихи и пьесы, которые вам хочется сыграть.", "en": "For those who have played before. Tone, intonation, bowing and the pieces you want to play." } }
   ],
   "prices": [
     { "id": "trial", "label": { "ru": "Пробный урок, 30 минут", "en": "Trial lesson, 30 min" }, "price": 0, "currency": "RUB" },

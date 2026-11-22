@@ -2,12 +2,12 @@
   "_comment": "Общие данные сайта. TODO: заменить заглушки реальными данными от заказчика.",
   "name": { "ru": "Елена Шпагина", "en": "Elena Shpagina" },
   "tagline": {
-    "ru": "Музыка от барокко до современности: живые концерты в лучших залах и бережное обучение игре на скрипке.",
-    "en": "Music from Baroque to today: live concerts in leading halls and patient, attentive violin teaching."
+    "ru": "Играю на барочной и современной скрипке. Концерты в Москве, уроки в студии и в Zoom.",
+    "en": "I play Baroque and modern violin. Concerts in Moscow, lessons in my studio and on Zoom."
   },
   "lead": {
-    "ru": "Выпускница Московской консерватории, участница международных фестивалей в Европе и России. Приглашаю на сольные и ансамблевые выступления в Москве, а также на индивидуальные уроки для детей и взрослых с любым уровнем подготовки.",
-    "en": "A graduate of the Moscow Conservatory who has performed at international festivals across Europe and Russia. Available for solo and ensemble performances in Moscow, and for private lessons for children and adults of any level."
+    "ru": "Выступаю соло и в ансамблях. Учу детей и взрослых — с нуля и продолжающих.",
+    "en": "I perform as a soloist and in ensembles, and teach children and adults — complete beginners included."
   },
   "seo": {
     "title": {
