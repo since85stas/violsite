@@ -5,6 +5,7 @@ import { type Lang, useTranslations, localizePath, pick } from '../i18n/ui';
 import site from '../data/site.json';
 import { allVideos } from '../lib/video';
 import { hasGalleryPhotos } from '../lib/gallery';
+import { logoMarkup, LOGO_VIEWBOX } from '../lib/logo';
 
 interface Props { lang: Lang; path: string }
 const { lang, path } = Astro.props;
@@ -12,6 +13,7 @@ const t = useTranslations(lang);
 const home = localizePath('/', lang);
 const otherLang: Lang = lang === 'ru' ? 'en' : 'ru';
 const otherHref = localizePath(path, otherLang);
+const mark = logoMarkup('hdr-logo', { accent: 'var(--accent)', ink: 'var(--ink)' });
 
 const links = [
   ['about', t('nav.about')],
@@ -24,7 +26,10 @@ const links = [
 ---
 <header class="header" data-header>
   <div class="wrap header__inner">
-    <a class="header__logo" href={home}>{pick(site.name, lang)}</a>
+    <a class="header__logo" href={home}>
+      <svg class="header__mark" viewBox={LOGO_VIEWBOX} aria-hidden="true" focusable="false" set:html={mark} />
+      <span>{pick(site.name, lang)}</span>
+    </a>
 
     <nav class="header__nav" id="site-nav" aria-label={t('nav.menu')} data-nav>
       <ul class="header__links">
@@ -68,8 +73,10 @@ const links = [
     border-bottom: 1px solid var(--line);
   }
   .header__inner { display: flex; align-items: center; gap: 24px; min-height: var(--header-h); }
-  .header__logo { font-family: var(--display); font-size: 23px; line-height: 1; color: var(--accent); text-decoration: none; white-space: nowrap; margin-right: auto; }
+  .header__logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-size: 23px; line-height: 1; color: var(--accent); text-decoration: none; white-space: nowrap; margin-right: auto; }
   .header__logo:hover { opacity: 0.85; }
+  /* Знак: пропорции 76:112, высота почти во всю шапку */
+  .header__mark { height: 40px; width: auto; flex: none; }
 
   .header__links { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 14px; }
   .header__links a, .header__lang { text-decoration: none; color: var(--muted); }
@@ -119,7 +126,8 @@ const links = [
   }
   @media (max-width: 520px) {
     .header__cta { display: none; }
-    .header__logo { font-size: 20px; }
+    .header__logo { font-size: 20px; gap: 8px; }
+    .header__mark { height: 34px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .header__burger-lines, .header__burger-lines::before, .header__burger-lines::after { transition: none; }

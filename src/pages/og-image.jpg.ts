@@ -1,11 +1,12 @@
 // Картинка для превью ссылок в мессенджерах и соцсетях (og:image), 1200×630.
-// Генерируется при сборке: слева имя на тёплом фоне, справа портрет из src/assets/portrait/
+// Генерируется при сборке: слева знак и имя на тёплом фоне, справа портрет из src/assets/portrait/
 // (первый файл), а если его нет — контур скрипки. Отдельно рисовать ничего не нужно.
 import type { APIRoute } from 'astro';
 import sharp from 'sharp';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import site from '../data/site.json';
+import { logoMarkup, LOGO_VIEWBOX } from '../lib/logo';
 
 const W = 1200;
 const H = 630;
@@ -28,6 +29,7 @@ export const GET: APIRoute = async () => {
   const textSvg = `
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <rect width="${W}" height="${H}" fill="#f6ead6"/>
+      <svg x="66" y="40" width="83" height="120" viewBox="${LOGO_VIEWBOX}">${logoMarkup('og', { accent: '#a0561b', ink: '#221f1b' })}</svg>
       <text x="72" y="250" font-family="Georgia, 'DejaVu Serif', 'Times New Roman', serif" font-size="88" fill="#a0561b">${esc(first)}</text>
       <text x="72" y="350" font-family="Georgia, 'DejaVu Serif', 'Times New Roman', serif" font-size="88" fill="#a0561b">${esc(rest.join(' '))}</text>
       <text x="74" y="430" font-family="'DejaVu Sans', Arial, sans-serif" font-size="30" fill="#5b3a14">Скрипачка · концерты и уроки</text>
