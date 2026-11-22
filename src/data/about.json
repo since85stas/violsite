@@ -1,15 +1,18 @@
 {
+  "_comment": "Последний абзац (личный) — ТЕСТОВЫЙ, заменить словами Елены.",
   "title": { "ru": "Барочная скрипка и большая сцена", "en": "Baroque violin and the big stage" },
   "paragraphs": {
     "ru": [
       "Я окончила Московскую консерваторию им. П. И. Чайковского — факультет исторического и современного исполнительского искусства. Барочную скрипку изучала на мастер-классах у Мари Леонхардт, Антона Штека, Лоренца Дуфтшмида и Синтии Робертс.",
       "Играла под управлением Курта Мазура, Кшиштофа Пендерецкого и Кристиана Ярви — в Берлинской филармонии, Театре Елисейских полей в Париже, венецианском театре Ла Фениче. Участвовала в проектах Baltic Sea Philharmonic, Schleswig-Holstein Musik Festival и Miami Summer Music Festival.",
-      "В Москве играю с камерными оркестрами «Кремлин» и «Московская камерата», ансамблем солистов «Эрмитаж», выступаю на фестивалях «Musica Iberica» в консерватории и «Московское барокко» в «Зарядье»."
+      "В Москве играю с камерными оркестрами «Кремлин» и «Московская камерата», ансамблем солистов «Эрмитаж», выступаю на фестивалях «Musica Iberica» в консерватории и «Московское барокко» в «Зарядье».",
+      "Для меня скрипка — это прежде всего разговор: с композитором, со слушателями, с учеником. На сцене я стараюсь, чтобы старинная музыка звучала живо и понятно, а на уроках — чтобы ученику было интересно и не страшно ошибаться. Мне важно, чтобы музыка приносила радость, а не становилась обязанностью."
     ],
     "en": [
       "I graduated from the Tchaikovsky Moscow State Conservatory, Faculty of Historical and Contemporary Performance. I studied Baroque violin in masterclasses with Marie Leonhardt, Anton Steck, Lorenz Duftschmid and Cynthia Roberts.",
       "I have played under Kurt Masur, Krzysztof Penderecki and Kristjan Järvi — at the Berlin Philharmonie, the Théâtre des Champs-Élysées in Paris and Teatro La Fenice in Venice — and taken part in the Baltic Sea Philharmonic, the Schleswig-Holstein Musik Festival and the Miami Summer Music Festival.",
-      "In Moscow I play with the Kremlin Chamber Orchestra, Moscow Camerata and the Hermitage soloists ensemble, and perform at the Musica Iberica festival at the Conservatory and the Moscow Baroque festival at Zaryadye Hall."
+      "In Moscow I play with the Kremlin Chamber Orchestra, Moscow Camerata and the Hermitage soloists ensemble, and perform at the Musica Iberica festival at the Conservatory and the Moscow Baroque festival at Zaryadye Hall.",
+      "For me, the violin is above all a conversation — with the composer, with the audience, with a student. On stage I want early music to sound alive and clear; in lessons I want students to stay curious and unafraid of mistakes. Music should bring joy, not feel like a chore."
     ]
   },
   "facts": [

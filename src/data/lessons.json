@@ -1,16 +1,17 @@
 {
   "_comment": "Уроки: аудитории, цены, варианты для формы. Пробный урок платный. Время в форме — желаемое, без проверки занятости.",
   "title": { "ru": "Уроки скрипки для детей и взрослых", "en": "Violin lessons for children and adults" },
-  "intro": { "ru": "Занятия индивидуальные — в студии в Москве или онлайн в Zoom. Программу подбираю под ваши цели и темп. Начать можно с пробного урока на 30 минут.", "en": "One-to-one lessons in my Moscow studio or online via Zoom. I shape the programme around your goals and pace. You can start with a 30-minute trial lesson." },
+  "intro": { "ru": "Занятия индивидуальные — в студии в Москве или онлайн. Программу подбираю под цели и темп ученика. Начинаем с пробного урока на 30 минут: знакомимся, я смотрю на музыкальные данные — слух и чувство ритма. Начинающие на нём же знакомятся с нотной грамотой и делают первые шаги на инструменте.", "en": "One-to-one lessons in my Moscow studio or online. I shape the programme around each student’s goals and pace. We begin with a 30-minute trial lesson: we get to know each other and I assess musical aptitude — ear and sense of rhythm. Beginners also get a first look at reading music and take their first steps on the instrument." },
   "audiences": [
     {
       "id": "kids",
       "title": { "ru": "Дети", "en": "Children" },
-      "text": { "ru": "Начинаем с постановки рук, слуха и чувства ритма — через игру и короткие пьесы. Помогу подобрать скрипку по размеру.", "en": "We start with posture, ear and sense of rhythm — through games and short pieces. I can help you choose a violin of the right size." },
+      "text": { "ru": "С 4 лет. Через игру и короткие пьесы развиваем слух и чувство ритма, ставим руки и учимся держать скрипку. Помогу подобрать инструмент по росту.", "en": "From age 4. Through games and short pieces we develop ear and rhythm, set up a good posture and learn to hold the violin. I can help choose an instrument of the right size." },
       "violinSizes": ["1/16", "1/8", "1/4", "1/2", "3/4", "4/4"]
     },
-    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "Никогда не держали скрипку — не страшно. Разберёмся, как держать инструмент и смычок, и уже на первых занятиях вы сыграете простые мелодии.", "en": "Never held a violin? No problem. We will sort out how to hold the instrument and bow, and you will play simple tunes in your first lessons." } },
-    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Для тех, кто занимался раньше. Звук, интонация, штрихи и пьесы, которые вам хочется сыграть.", "en": "For those who have played before. Tone, intonation, bowing and the pieces you want to play." } }
+    { "id": "adults", "title": { "ru": "Взрослые с нуля", "en": "Adult beginners" }, "text": { "ru": "Никогда не держали скрипку — не страшно. Разберёмся с нотами, с тем, как держать инструмент и смычок, и уже на первых занятиях вы сыграете простые мелодии.", "en": "Never held a violin? No problem. We will cover reading music and how to hold the instrument and bow, and you will play simple tunes in your very first lessons." } },
+    { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Для тех, кто занимался раньше и хочет вернуться или двигаться дальше. Звук, интонация, штрихи и пьесы, которые хочется сыграть.", "en": "For those who have played before and want to come back or go further. Tone, intonation, bowing and the pieces you want to play." } },
+    { "id": "baroque", "title": { "ru": "Барочная скрипка", "en": "Baroque violin" }, "text": { "ru": "Для тех, кто уже уверенно играет на современной скрипке. Жильные струны, барочный смычок, исторические штрихи и манера исполнения музыки XVII–XVIII веков.", "en": "For players already confident on the modern violin. Gut strings, the Baroque bow, historical bowing and the performance style of 17th–18th-century music." } }
   ],
   "prices": [
     { "id": "trial", "label": { "ru": "Пробный урок, 30 минут", "en": "Trial lesson, 30 min" }, "price": 0, "currency": "RUB" },
@@ -20,10 +21,11 @@
   ],
   "form": {
     "whoOptions": [
-      { "value": "kid-5-9", "label": { "ru": "Ребёнок 5–9 лет", "en": "Child, 5–9" } },
+      { "value": "kid-4-9", "label": { "ru": "Ребёнок 4–9 лет", "en": "Child, 4–9" } },
       { "value": "kid-10-16", "label": { "ru": "Ребёнок 10–16 лет", "en": "Child, 10–16" } },
       { "value": "adult-new", "label": { "ru": "Взрослый, с нуля", "en": "Adult, beginner" } },
-      { "value": "adult-back", "label": { "ru": "Взрослый, уже играл", "en": "Adult, has played before" } }
+      { "value": "adult-back", "label": { "ru": "Взрослый, уже играл", "en": "Adult, has played before" } },
+      { "value": "baroque", "label": { "ru": "Барочная скрипка", "en": "Baroque violin" } }
     ],
     "daysAhead": 14,
     "skipWeekdays": [0],

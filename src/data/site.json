@@ -2,12 +2,12 @@
   "_comment": "Общие данные сайта. TODO: заменить заглушки реальными данными от заказчика.",
   "name": { "ru": "Елена Шпагина", "en": "Elena Shpagina" },
   "tagline": {
-    "ru": "Играю на барочной и современной скрипке. Концерты в Москве, уроки в студии и в Zoom.",
-    "en": "I play Baroque and modern violin. Concerts in Moscow, lessons in my studio and on Zoom."
+    "ru": "Играю на барочной и современной скрипке. Концерты в Москве, уроки в студии и онлайн.",
+    "en": "I play Baroque and modern violin. Concerts in Moscow, lessons in my studio and online."
   },
   "lead": {
-    "ru": "Выступаю соло и в ансамблях. Учу детей и взрослых — с нуля и продолжающих.",
-    "en": "I perform as a soloist and in ensembles, and teach children and adults — complete beginners included."
+    "ru": "Выступаю соло и в ансамблях. Учу детей с 4 лет и взрослых — с нуля и продолжающих.",
+    "en": "I perform as a soloist and in ensembles, and teach children from age 4 and adults — complete beginners included."
   },
   "seo": {
     "title": {
@@ -15,8 +15,8 @@
       "en": "Elena Shpagina — violinist. Concerts and violin lessons"
     },
     "description": {
-      "ru": "Скрипачка Елена Шпагина: афиша концертов, видео и уроки скрипки для детей и взрослых — в студии и онлайн в Zoom. Пробный урок.",
-      "en": "Violinist Elena Shpagina: concert schedule, videos and violin lessons for children and adults — in the studio or online via Zoom."
+      "ru": "Скрипачка Елена Шпагина: афиша концертов, видео и уроки скрипки для детей и взрослых — в студии и онлайн. Пробный урок.",
+      "en": "Violinist Elena Shpagina: concert schedule, videos and violin lessons for children and adults — in the studio or online."
     },
     "_city_comment": "Город для поисковиков (уроки «в городе»). TODO: подтвердить у Елены.",
     "city": { "ru": "Москва", "en": "Moscow" }
