@@ -47,7 +47,6 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
               aria-label={`${t('gallery.open')}: ${pick(p.caption, lang)}`}
             >
               <img src={p.thumb} srcset={p.thumbSrcset} sizes="(max-width: 820px) 50vw, 25vw" alt={pick(p.caption, lang)} loading="lazy" decoding="async" />
-              <span class="gallery__caption" aria-hidden="true">{pick(p.caption, lang)}</span>
             </button>
           </li>
         ))}
@@ -64,7 +63,6 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
       <figure class="lightbox__figure">
         <img class="lightbox__img" alt="" data-lb-img />
         <figcaption class="lightbox__caption">
-          <span data-lb-caption></span>
           <small><span data-lb-meta></span> · <span data-lb-counter></span></small>
         </figcaption>
       </figure>
@@ -98,10 +96,6 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
   /* Лица на фото обычно в верхней трети — при обрезке держим их в кадре */
   .gallery__open img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; transition: transform 0.4s ease; }
   .gallery__open:hover img { transform: scale(1.03); }
-  .gallery__caption {
-    position: absolute; inset: auto 0 0; padding: 28px 12px 10px; text-align: left;
-    font-size: 13px; color: #fff; background: linear-gradient(to top, rgb(0 0 0 / 0.6), transparent);
-  }
   @media (max-width: 820px) {
     /* Ячейка 4:3 от ширины колонки (экран − 2 поля по 16px − зазор 12px, пополам);
        широкая карточка занимает и две строки — выходит почти 3:2, как сами снимки */
@@ -148,7 +142,6 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
     const items = Array.from(grid.querySelectorAll<HTMLElement>('.gallery__item'));
     const buttons = items.map((li) => li.querySelector<HTMLButtonElement>('.gallery__open')!);
     const img = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
-    const caption = dialog.querySelector<HTMLElement>('[data-lb-caption]')!;
     const meta = dialog.querySelector<HTMLElement>('[data-lb-meta]')!;
     const counter = dialog.querySelector<HTMLElement>('[data-lb-counter]')!;
     let current = 0;
@@ -172,7 +165,6 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
       current = list.indexOf(btn);
       img.src = btn.dataset.full ?? '';
       img.alt = btn.dataset.caption ?? '';
-      caption.textContent = btn.dataset.caption ?? '';
       meta.textContent = btn.dataset.meta ?? '';
       counter.textContent = `${current + 1} / ${list.length}`;
       // заранее подгружаем соседние фото

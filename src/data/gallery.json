@@ -1,5 +1,5 @@
 {
-  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. Подписи описывают то, что видно на фото; площадку и год (meta) уточнить у Елены. Пустой file — показывается заглушка.",
+  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. caption на сайте не показывается — это текст для незрячих и поисковиков (alt); meta (площадка, год) видна в просмотре фото. Пустой file — показывается заглушка.",
   "items": [
     {
       "file": "portrait-01.jpg",
