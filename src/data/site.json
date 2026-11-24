@@ -30,7 +30,8 @@
   "contacts": {
     "phone": "+7 958 861-78-48",
     "telegram": "Violinka88",
-    "whatsapp": "+7 958 861-78-48",
+    "_maxComment": "max — ссылка на профиль Елены в MAX вида https://max.ru/u/… (в MAX: профиль → Поделиться). Пусто — кнопки MAX на сайте не показываются.",
+    "max": "",
     "emailConcerts": "violin1988@gmail.com",
     "emailLessons": "violin1988@gmail.com"
   },

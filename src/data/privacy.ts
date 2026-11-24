@@ -30,8 +30,8 @@ export const privacy: Record<'ru' | 'en', PrivacyText> = {
         title: 'Запись на уроки через мессенджеры',
         paragraphs: [
           'Блок «Запись на пробный урок» только составляет текст сообщения из выбранных вами вариантов (формат, день, время, кто будет заниматься). Этот выбор никуда не отправляется и не сохраняется.',
-          'Кнопки «Написать в WhatsApp» и «Написать в Telegram» открывают ваш мессенджер. Сообщение отправляете вы сами. Вместе с ним {name} получает то, что мессенджер показывает собеседнику: имя профиля, номер телефона или имя пользователя.',
-          'Эти данные используются только чтобы ответить вам и договориться об уроке. Переписку можно удалить по вашей просьбе. Обработку данных внутри мессенджеров регулируют правила WhatsApp и Telegram.',
+          'Кнопки «Написать в MAX» и «Написать в Telegram» открывают ваш мессенджер. Для MAX текст сообщения копируется в буфер обмена на вашем устройстве — сайт его никуда не передаёт. Сообщение отправляете вы сами. Вместе с ним {name} получает то, что мессенджер показывает собеседнику: имя профиля, номер телефона или имя пользователя.',
+          'Эти данные используются только чтобы ответить вам и договориться об уроке. Переписку можно удалить по вашей просьбе. Обработку данных внутри мессенджеров регулируют правила MAX и Telegram.',
         ],
       },
       {
@@ -43,7 +43,7 @@ export const privacy: Record<'ru' | 'en', PrivacyText> = {
           'GitHub Pages (GitHub, Inc.) — хостинг сайта. GitHub может сохранять IP-адреса посетителей в журналах для безопасности и работы сервиса.',
           'Google Таблицы (Google LLC) — из опубликованной таблицы загружается афиша концертов.',
           'YouTube, Rutube, VK Видео — только если вы нажали на видео: до нажатия плеер не загружается. Обложки видео YouTube загружаются с серверов YouTube.',
-          'WhatsApp и Telegram — только если вы нажали кнопку записи.',
+          'MAX и Telegram — только если вы нажали кнопку записи.',
         ],
       },
       {
@@ -79,8 +79,8 @@ export const privacy: Record<'ru' | 'en', PrivacyText> = {
         title: 'Booking via messengers',
         paragraphs: [
           'The “Book a trial lesson” block only drafts a message from the options you choose (format, day, time, student). Your choice is not sent or stored anywhere.',
-          'The “Message on WhatsApp” and “Message on Telegram” buttons open your messenger, and you send the message yourself. {name} then sees what the messenger shows to any contact: your profile name, phone number or username.',
-          'This information is used only to reply and arrange the lesson. The conversation can be deleted on request. Data inside the messengers is governed by the WhatsApp and Telegram policies.',
+          'The “Message on MAX” and “Message on Telegram” buttons open your messenger. For MAX the message text is copied to the clipboard on your device — the site does not send it anywhere. You send the message yourself. {name} then sees what the messenger shows to any contact: your profile name, phone number or username.',
+          'This information is used only to reply and arrange the lesson. The conversation can be deleted on request. Data inside the messengers is governed by the MAX and Telegram policies.',
         ],
       },
       {
@@ -92,7 +92,7 @@ export const privacy: Record<'ru' | 'en', PrivacyText> = {
           'GitHub Pages (GitHub, Inc.) — website hosting. GitHub may keep visitor IP addresses in logs for security and service operation.',
           'Google Sheets (Google LLC) — the concert schedule is loaded from a published spreadsheet.',
           'YouTube, Rutube, VK Video — only after you click a video; the player is not loaded before that. YouTube video thumbnails are loaded from YouTube servers.',
-          'WhatsApp and Telegram — only if you press a booking button.',
+          'MAX and Telegram — only if you press a booking button.',
         ],
       },
       {
