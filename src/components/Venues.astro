@@ -34,12 +34,15 @@ const ratioOfSvg = (svg?: string) => {
 };
 const heightFor = (ratio: number) => (ratio >= 3 ? 32 : ratio >= 2.2 ? 44 : 60);
 
-const items = venues.items.map((v) => {
-  const logo = logoFor(v.id);
-  const png = pngFor(v.id);
-  const ratio = logo ? ratioOfSvg(logo) : png ? png.width / png.height : 0;
-  return { name: pick(v.name, lang), logo, png, h: heightFor(ratio || 4) };
-});
+// Сначала — с логотипами, затем — названия шрифтом; внутри групп — порядок из venues.json
+const items = venues.items
+  .map((v) => {
+    const logo = logoFor(v.id);
+    const png = pngFor(v.id);
+    const ratio = logo ? ratioOfSvg(logo) : png ? png.width / png.height : 0;
+    return { name: pick(v.name, lang), logo, png, h: heightFor(ratio || 4) };
+  })
+  .sort((a, b) => Number(!(a.logo || a.png)) - Number(!(b.logo || b.png)));
 ---
 <div class="venues">
   <div class="eyebrow venues__label">{t('about.venues')}</div>
