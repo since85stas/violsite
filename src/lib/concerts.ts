@@ -15,9 +15,13 @@ export interface Concert {
   time: string;        // HH:MM
   city: string;
   venue: string;
-  program: string;
+  program: string;     // кратко: название концерта — видно в афише
   type: ConcertType;
   ticketsUrl: string;
+  // Подробности — в окне по клику на название (все поля необязательные)
+  details?: string;    // программа вечера: произведения, по строке на каждое
+  performers?: string; // исполнители
+  address?: string;    // точный адрес площадки
 }
 
 let cache: Promise<Concert[]> | undefined;

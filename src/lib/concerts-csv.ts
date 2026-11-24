@@ -38,6 +38,9 @@ const COLUMNS: Record<keyof Concert | 'show', string[]> = {
   program: ['программа', 'program', 'programme'],
   type: ['тип', 'type'],
   ticketsUrl: ['билеты', 'tickets', 'ссылка на билеты'],
+  details: ['программа вечера', 'подробная программа', 'full program', 'full programme'],
+  performers: ['исполнители', 'состав', 'performers', 'musicians'],
+  address: ['адрес', 'address'],
   show: ['показывать', 'show', 'visible'],
 };
 
@@ -46,6 +49,9 @@ const TYPES: Record<string, ConcertType> = {
   'с оркестром': 'orchestra', 'orchestra': 'orchestra', 'with orchestra': 'orchestra',
   'камерный': 'chamber', 'chamber': 'chamber',
 };
+
+/** Есть ли что показать в окне с подробностями (по клику на название концерта). */
+export const hasDetails = (c: Concert) => Boolean(c.details || c.performers || c.address);
 
 const NO = new Set(['нет', 'no', 'false', '0', 'скрыть', 'hide']);
 
@@ -92,6 +98,9 @@ export function rowsToConcerts(rows: string[][]): Concert[] {
       program: get(r, 'program'),
       type: TYPES[get(r, 'type').toLowerCase()] ?? 'other',
       ticketsUrl: /^https?:\/\//i.test(tickets) ? tickets : '',
+      details: get(r, 'details'),
+      performers: get(r, 'performers'),
+      address: get(r, 'address'),
     });
   }
   return out;

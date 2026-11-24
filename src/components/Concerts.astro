@@ -6,6 +6,7 @@
 // переносятся в «Прошедшие» по сегодняшней дате.
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import { CONCERT_TYPES, type Concert } from '../lib/concerts';
+import { hasDetails } from '../lib/concerts-csv';
 import site from '../data/site.json';
 
 interface Props { lang: Lang; upcoming: Concert[]; past: Concert[] }
@@ -39,6 +40,7 @@ const labels = {
   pastLimit: PAST_LIMIT,
   pastVisible: PAST_VISIBLE,
   tickets: t('concerts.tickets'),
+  more: t('concerts.more'),
   types: Object.fromEntries(CONCERT_TYPES.map((k) => [k, t(`concerts.type.${k}`)])),
 };
 
@@ -51,9 +53,13 @@ const jsonLd = upcoming.map((c) => ({
   startDate: c.time ? `${c.date}T${c.time}:00+03:00` : c.date,
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-  location: { '@type': 'Place', name: c.venue, address: { '@type': 'PostalAddress', addressLocality: c.city } },
+  location: {
+    '@type': 'Place',
+    name: c.venue,
+    address: { '@type': 'PostalAddress', addressLocality: c.city, ...(c.address && { streetAddress: c.address }) },
+  },
   performer,
-  ...(c.program && { description: c.program }),
+  ...((c.details || c.program) && { description: c.details || c.program }),
   ...(c.ticketsUrl && { offers: { '@type': 'Offer', url: c.ticketsUrl, availability: 'https://schema.org/InStock' } }),
 }));
 ---
@@ -84,7 +90,7 @@ const jsonLd = upcoming.map((c) => ({
           {l.items.map((c) => {
             const p = parts(c);
             return (
-              <li class="concert" data-date={c.date}>
+              <li class="concert" data-date={c.date} data-info={hasDetails(c) ? JSON.stringify(c) : undefined}>
                 <div class="concert__date">
                   <span class="concert__day">{p.day}</span>
                   <span class="concert__month">{p.month} {p.year}</span>
@@ -92,7 +98,11 @@ const jsonLd = upcoming.map((c) => ({
                 </div>
                 <div class="concert__info">
                   <div class="concert__where">{c.city} — {c.venue}</div>
-                  {c.program && <div class="concert__program">{c.program}</div>}
+                  {hasDetails(c) ? (
+                    <button type="button" class="concert__program concert__more" data-details aria-haspopup="dialog">
+                      {c.program || t('concerts.more')}
+                    </button>
+                  ) : c.program && <div class="concert__program">{c.program}</div>}
                 </div>
                 <div class="concert__meta">
                   <span class="pill">{t(`concerts.type.${c.type}`)}</span>
@@ -113,6 +123,34 @@ const jsonLd = upcoming.map((c) => ({
       </div>
     ))}
   </div>
+
+  <!-- Подробности концерта: заполняет скрипт по клику на название -->
+  <dialog class="cdialog" aria-labelledby="cdialog-title" data-concert-dialog>
+    <button class="cdialog__close" type="button" data-close aria-label={t('concerts.close')}>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" /></svg>
+    </button>
+    <div class="eyebrow" data-d-when></div>
+    <h3 class="cdialog__title" id="cdialog-title" data-d-title></h3>
+    <dl class="cdialog__list">
+      <div>
+        <dt>{t('concerts.where')}</dt>
+        <dd>
+          <span data-d-venue></span>
+          <span class="cdialog__address" data-d-address></span>
+          <a class="cdialog__map" target="_blank" rel="noopener" data-d-map>{t('concerts.map')}</a>
+        </dd>
+      </div>
+      <div data-d-details-row>
+        <dt>{t('concerts.programme')}</dt>
+        <dd class="cdialog__text" data-d-details></dd>
+      </div>
+      <div data-d-performers-row>
+        <dt>{t('concerts.performers')}</dt>
+        <dd class="cdialog__text" data-d-performers></dd>
+      </div>
+    </dl>
+    <a class="btn btn--primary cdialog__tickets" target="_blank" rel="noopener" data-d-tickets>{t('concerts.tickets')}</a>
+  </dialog>
   {jsonLd.length > 0 && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />}
 </section>
 
@@ -146,6 +184,38 @@ const jsonLd = upcoming.map((c) => ({
   }
   #concerts [data-panel='past'] .concert__tickets { display: none; }
 
+  /* Название концерта, по которому открываются подробности */
+  #concerts .concert__more {
+    display: inline; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; text-align: left;
+    color: var(--ink); cursor: pointer;
+    text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 4px;
+  }
+  #concerts .concert__more:hover { color: var(--accent); text-decoration-color: currentColor; }
+
+  /* Окно с подробностями концерта */
+  #concerts .cdialog {
+    width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto;
+    padding: 32px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--ink);
+  }
+  #concerts .cdialog::backdrop { background: rgb(0 0 0 / 0.5); }
+  #concerts .cdialog__close {
+    position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center; border: 0; background: transparent; color: var(--muted); cursor: pointer;
+  }
+  #concerts .cdialog__close:hover { background: var(--soft); color: var(--ink); }
+  #concerts .cdialog__title { font-size: clamp(24px, 4vw, 30px); margin: 8px 40px 20px 0; }
+  #concerts .cdialog__list { margin: 0; display: grid; gap: 18px; }
+  #concerts .cdialog__list dt { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  #concerts .cdialog__list dd { margin: 0; display: flex; flex-direction: column; gap: 2px; }
+  #concerts .cdialog__list [hidden] { display: none; }
+  #concerts .cdialog__address { color: var(--muted); }
+  #concerts .cdialog__map { font-size: 14px; color: var(--accent); width: fit-content; }
+  #concerts .cdialog__text { white-space: pre-line; }
+  #concerts .cdialog__tickets { margin-top: 24px; }
+  #concerts .cdialog__tickets[hidden] { display: none; }
+  @media (max-width: 640px) { #concerts .cdialog { padding: 24px 20px; } }
+
   @media (max-width: 640px) {
     #concerts .concert { grid-template-columns: 76px minmax(0, 1fr); gap: 10px 16px; align-items: start; }
     #concerts .concert__meta { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
@@ -154,10 +224,11 @@ const jsonLd = upcoming.map((c) => ({
 </style>
 
 <script>
-  import { parseCsv, rowsToConcerts } from '../lib/concerts-csv';
+  import { parseCsv, rowsToConcerts, hasDetails } from '../lib/concerts-csv';
   import type { Concert } from '../lib/concerts';
 
-  interface Labels { locale: string; pastLimit: number; pastVisible: number; tickets: string; types: Record<string, string> }
+
+  interface Labels { locale: string; pastLimit: number; pastVisible: number; tickets: string; more: string; types: Record<string, string> }
 
   const section = document.querySelector<HTMLElement>('[data-concerts]');
   const tablist = section?.querySelector<HTMLElement>('[data-concert-tabs]');
@@ -214,6 +285,49 @@ const jsonLd = upcoming.map((c) => ({
       }
     };
 
+    // --- подробности концерта в окне (клик по названию; работает и для перерисованных карточек) ---
+    const dialog = section.querySelector<HTMLDialogElement>('[data-concert-dialog]')!;
+    const part = <T extends HTMLElement = HTMLElement>(name: string) => dialog.querySelector<T>(`[data-d-${name}]`)!;
+    let opener: HTMLElement | null = null;
+
+    const openDetails = (c: Concert, from: HTMLElement) => {
+      const d = new Date(`${c.date}T12:00:00`);
+      // «22 ноября 2026» (без «г.», который добавляет русская локаль)
+      const date = new Intl.DateTimeFormat(labels.locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(d).replace(/\s*г\.$/, '');
+      part('when').textContent = c.time ? `${date}, ${c.time}` : date;
+      part('title').textContent = c.program || c.venue;
+      part('venue').textContent = `${c.venue}, ${c.city}`;
+      part('address').textContent = c.address ?? '';
+      part('address').hidden = !c.address;
+      // Карта: ищем по адресу, если он есть, иначе по названию площадки
+      const map = part<HTMLAnchorElement>('map');
+      map.href = `https://yandex.ru/maps/?text=${encodeURIComponent(`${c.city}, ${c.address || c.venue}`)}`;
+      part('details').textContent = c.details ?? '';
+      part('details-row').hidden = !c.details;
+      part('performers').textContent = c.performers ?? '';
+      part('performers-row').hidden = !c.performers;
+      const tickets = part<HTMLAnchorElement>('tickets');
+      const showTickets = c.date >= today && /^https?:\/\//i.test(c.ticketsUrl);
+      tickets.hidden = !showTickets;
+      if (showTickets) tickets.href = c.ticketsUrl;
+      opener = from;
+      dialog.showModal();
+    };
+
+    section.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-details]');
+      const info = btn?.closest<HTMLElement>('[data-info]')?.dataset.info;
+      if (btn && info) openDetails(JSON.parse(info) as Concert, btn);
+    });
+    dialog.querySelector('[data-close]')!.addEventListener('click', () => dialog.close());
+    // клик по затемнённому фону закрывает окно
+    dialog.addEventListener('click', (e) => {
+      const r = dialog.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (e.target === dialog && !inside) dialog.close();
+    });
+    dialog.addEventListener('close', () => opener?.focus());
+
     const el = (tag: string, cls: string, text?: string) => {
       const node = document.createElement(tag);
       if (cls) node.className = cls;
@@ -236,7 +350,14 @@ const jsonLd = upcoming.map((c) => ({
 
       const info = el('div', 'concert__info');
       info.append(el('div', 'concert__where', `${c.city} — ${c.venue}`));
-      if (c.program) info.append(el('div', 'concert__program', c.program));
+      if (hasDetails(c)) {
+        li.dataset.info = JSON.stringify(c);
+        const btn = el('button', 'concert__program concert__more', c.program || labels.more) as HTMLButtonElement;
+        btn.type = 'button';
+        btn.dataset.details = '';
+        btn.setAttribute('aria-haspopup', 'dialog');
+        info.append(btn);
+      } else if (c.program) info.append(el('div', 'concert__program', c.program));
 
       const meta = el('div', 'concert__meta');
       meta.append(el('span', 'pill', labels.types[c.type] ?? labels.types.other));
