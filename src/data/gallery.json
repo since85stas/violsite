@@ -9,13 +9,6 @@
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "portrait-05.jpg",
-      "category": "portrait",
-      "size": "",
-      "caption": { "ru": "Портрет в красном", "en": "Portrait in red" },
-      "meta": { "ru": "", "en": "" }
-    },
-    {
       "file": "portrait-07.jpg",
       "category": "portrait",
       "size": "tall",
@@ -44,17 +37,17 @@
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "concert-11.jpg",
-      "category": "concert",
-      "size": "tall",
-      "caption": { "ru": "В историческом костюме", "en": "In historical costume" },
-      "meta": { "ru": "", "en": "" }
-    },
-    {
       "file": "portrait-02.jpg",
       "category": "portrait",
       "size": "",
       "caption": { "ru": "Музыка в старинном интерьере", "en": "Music in a period interior" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-11.jpg",
+      "category": "concert",
+      "size": "tall",
+      "caption": { "ru": "В историческом костюме", "en": "In historical costume" },
       "meta": { "ru": "", "en": "" }
     },
     {
