@@ -89,6 +89,15 @@ p { margin: 0; }
 .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn--primary:hover { background: var(--accent); filter: brightness(1.07); }
 
+/* «Живая афиша»: заголовки выплывают при прокрутке. Класс reveal-on ставит скрипт в Base.astro —
+   без JS и при «уменьшить движение» заголовки видны сразу. */
+.reveal-on .reveal:not(.is-in) { opacity: 0; transform: translateY(28px); }
+.reveal-on .reveal {
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) var(--reveal-delay, 0s),
+    transform 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) var(--reveal-delay, 0s);
+}
+
 /* «Показать все» под свёрнутым списком (галерея, прошедшие концерты) */
 .show-all { display: flex; justify-content: center; margin-top: 28px; }
 .show-all[hidden] { display: none; }

@@ -55,6 +55,47 @@ const altEn = new URL(localizePath(path, 'en'), Astro.site);
     <meta property="og:locale:alternate" content={lang === 'ru' ? 'en_US' : 'ru_RU'} />
 
     <slot name="head" />
+
+    <!-- «Живая афиша»: заголовки плавно выплывают при прокрутке (стили — global.css, .reveal).
+         Встроено в head, чтобы скрыть заголовки до первой отрисовки и не мигать.
+         Без JS, без IntersectionObserver или при «уменьшить движение» — всё видно сразу. -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.classList.add('reveal-on');
+        document.addEventListener('DOMContentLoaded', () => {
+          // Группы: надпись над заголовком → заголовок → подзаголовок, с небольшой задержкой друг за другом
+          const groups = [
+            ['.hero .eyebrow', '.hero__name', '.hero__tagline'],
+            ...Array.from(document.querySelectorAll('main .section h2')).map((h2) => {
+              const eyebrow = h2.previousElementSibling;
+              return eyebrow && eyebrow.classList.contains('eyebrow') ? [eyebrow, h2] : [h2];
+            }),
+          ];
+          const io = new IntersectionObserver((entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }, { rootMargin: '0px 0px -8% 0px' });
+          for (const group of groups) {
+            group.forEach((item, i) => {
+              const el = typeof item === 'string' ? document.querySelector(item) : item;
+              if (!el || el.classList.contains('reveal')) return;
+              el.classList.add('reveal');
+              el.style.setProperty('--reveal-delay', `${i * 0.12}s`);
+              io.observe(el);
+            });
+          }
+          // Подстраховка: если что-то пошло не так, через 4 с показываем всё, что уже на экране и выше
+          setTimeout(() => document.querySelectorAll('.reveal:not(.is-in)').forEach((el) => {
+            if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-in');
+          }), 4000);
+        });
+      })();
+    </script>
   </head>
   <body>
     <Header lang={lang} path={path} />

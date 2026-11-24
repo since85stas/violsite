@@ -155,6 +155,24 @@ const nextDate = next
   .hero__portrait { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
   /* Лицо на портрете — в верхней трети: при обрезке до 4:5 и 4:3 держим его и скрипку в кадре */
   .hero__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+  /* Параллакс: при прокрутке вниз фото чуть отстаёт от рамки. Только CSS (scroll-driven animations):
+     где браузер не умеет (Firefox) или на телефоне и при «уменьшить движение» — фото просто стоит. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 821px) {
+      /* Временная шкала — по рамке: сама рамка с overflow: hidden для картинки считается
+         прокручиваемым блоком, и view() у картинки никогда бы не сдвинулся */
+      .hero__portrait { view-timeline: --hero-portrait block; }
+      .hero__portrait :global(img) {
+        animation: hero-parallax linear both;
+        animation-timeline: --hero-portrait;
+        animation-range: exit 0% exit 100%;
+      }
+    }
+  }
+  @keyframes hero-parallax {
+    from { transform: scale(1.1) translateY(0); }
+    to { transform: scale(1.1) translateY(7%); }
+  }
   .hero__placeholder { width: 100%; height: 100%; display: grid; place-items: center; color: var(--muted); }
   .hero__placeholder svg { width: 40%; height: auto; opacity: 0.5; }
 
