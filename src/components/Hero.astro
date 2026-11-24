@@ -155,21 +155,38 @@ const nextDate = next
   .hero__portrait { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
   /* Лицо на портрете — в верхней трети: при обрезке до 4:5 и 4:3 держим его и скрипку в кадре */
   .hero__portrait :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
-  /* Параллакс: при прокрутке вниз фото чуть отстаёт от рамки. Только CSS (scroll-driven animations):
-     где браузер не умеет (Firefox) или на телефоне и при «уменьшить движение» — фото просто стоит. */
+
+  /* Анимации портрета. Только отдельные свойства animation-*: сокращённое animation минификатор
+     сборки склеивает с animation-timeline и выбрасывает оба (в dev-режиме этого не видно).
+     1) Проявление при загрузке: из лёгкой дымки и чуть крупнее — в обычный кадр, в такт имени.
+        Двигает свойство scale, а параллакс — transform, поэтому они не мешают друг другу. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__portrait :global(img) {
+      animation-name: hero-intro;
+      animation-duration: 1.6s;
+      animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+      animation-fill-mode: both;
+    }
+  }
+  @keyframes hero-intro {
+    from { opacity: 0; scale: 1.08; filter: blur(10px); }
+    to { opacity: 1; scale: 1; filter: blur(0); }
+  }
+
+  /* 2) Параллакс: при прокрутке вниз фото чуть отстаёт от рамки (scroll-driven animations).
+     Где браузер не умеет (Firefox), на телефоне и при «уменьшить движение» — фото просто стоит. */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) and (min-width: 821px) {
       /* Временная шкала — по рамке: сама рамка с overflow: hidden для картинки считается
          прокручиваемым блоком, и view() у картинки никогда бы не сдвинулся */
       .hero__portrait { view-timeline: --hero-portrait block; }
-      /* Только отдельные свойства: сокращённое animation минификатор сборки склеивает
-         с animation-timeline и выбрасывает оба (в dev-режиме этого не видно) */
       .hero__portrait :global(img) {
-        animation-name: hero-parallax;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: --hero-portrait;
-        animation-range: exit 0% exit 100%;
+        animation-name: hero-intro, hero-parallax;
+        animation-duration: 1.6s, auto;
+        animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1), linear;
+        animation-fill-mode: both, both;
+        animation-timeline: auto, --hero-portrait;
+        animation-range: normal, exit 0% exit 100%;
       }
     }
   }
