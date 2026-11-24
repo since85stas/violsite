@@ -1,7 +1,8 @@
 ---
-// О себе: биография слева, блок цифр справа.
+// О себе: биография слева, блок цифр справа, под ними — лента «Сцены и фестивали».
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import about from '../data/about.json';
+import Venues from './Venues.astro';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -24,6 +25,7 @@ const [first, ...rest] = pick(about.paragraphs, lang);
         </div>
       ))}
     </dl>
+    <Venues lang={lang} />
   </div>
 </section>
 
