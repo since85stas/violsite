@@ -144,6 +144,10 @@ const nextDate = next
   .hero__msgr svg { width: 18px; height: 18px; color: var(--accent); }
   .hero__hint { flex-basis: 100%; font-size: 14px; color: var(--accent); }
   .hero__hint[hidden] { display: none; }
+  /* На телефоне подпись — отдельной строкой, а обе кнопки мессенджеров — рядом под ней */
+  @media (max-width: 520px) {
+    .hero__quick > span:first-child { flex-basis: 100%; }
+  }
   .hero__next {
     margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line);
     display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline;
