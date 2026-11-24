@@ -7,6 +7,8 @@
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import { CONCERT_TYPES, type Concert } from '../lib/concerts';
 import { hasDetails } from '../lib/concerts-csv';
+import { calendarId, googleCalendarUrl } from '../lib/calendar';
+import { withBase } from '../lib/url';
 import site from '../data/site.json';
 
 interface Props { lang: Lang; upcoming: Concert[]; past: Concert[] }
@@ -34,6 +36,14 @@ const lists = [
 // Ссылка на опубликованную таблицу — она и так публичная. Локальный файл (для проверки) в браузер не отдаём.
 const csvUrl = /^https?:\/\//i.test(import.meta.env.CONCERTS_CSV_URL ?? '') ? import.meta.env.CONCERTS_CSV_URL : '';
 
+// «Добавить в календарь»: файл .ics со сборки (src/pages/calendar/[id].ics.ts) и ссылка Google Календаря
+const calOpts = {
+  performer: pick(site.name, lang),
+  concertWord: t('concerts.concertWord'),
+  pageUrl: new URL(withBase(lang === 'ru' ? '/#concerts' : '/en/#concerts'), Astro.site).toString(),
+};
+const calBase = withBase('/calendar/');
+
 // Тексты для перерисовки в браузере
 const labels = {
   locale,
@@ -42,6 +52,7 @@ const labels = {
   tickets: t('concerts.tickets'),
   more: t('concerts.more'),
   types: Object.fromEntries(CONCERT_TYPES.map((k) => [k, t(`concerts.type.${k}`)])),
+  cal: { ...calOpts, base: calBase, ids: upcoming.map(calendarId), add: t('concerts.addToCalendar'), ics: t('concerts.calIcs'), google: t('concerts.calGoogle') },
 };
 
 // Разметка для поисковиков: предстоящие концерты как MusicEvent
@@ -108,6 +119,17 @@ const jsonLd = upcoming.map((c) => ({
                   <span class="pill">{t(`concerts.type.${c.type}`)}</span>
                   {c.ticketsUrl && (
                     <a class="btn concert__tickets" href={c.ticketsUrl} target="_blank" rel="noopener">{t('concerts.tickets')}</a>
+                  )}
+                  {l.id === 'upcoming' && (
+                    <details class="cal">
+                      <summary class="cal__btn" aria-label={t('concerts.addToCalendar')} title={t('concerts.addToCalendar')}>
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>
+                      </summary>
+                      <div class="cal__menu">
+                        <a href={`${calBase}${calendarId(c)}.ics`}>{t('concerts.calIcs')}</a>
+                        <a href={googleCalendarUrl(c, calOpts)} target="_blank" rel="noopener">{t('concerts.calGoogle')}</a>
+                      </div>
+                    </details>
                   )}
                 </div>
               </li>
@@ -184,6 +206,23 @@ const jsonLd = upcoming.map((c) => ({
   }
   #concerts [data-panel='past'] .concert__tickets { display: none; }
 
+  /* «Добавить в календарь»: кнопка-иконка и меню из двух ссылок */
+  #concerts .cal { position: relative; }
+  #concerts [data-panel='past'] .cal { display: none; }
+  #concerts .cal__btn {
+    list-style: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+    border: 1px solid var(--ink); color: var(--ink); cursor: pointer;
+  }
+  #concerts .cal__btn::-webkit-details-marker { display: none; }
+  #concerts .cal__btn:hover, #concerts .cal[open] .cal__btn { background: var(--soft); }
+  #concerts .cal__menu {
+    position: absolute; right: 0; top: calc(100% + 6px); z-index: 5; min-width: 220px;
+    display: flex; flex-direction: column; padding: 6px; border-radius: 8px;
+    background: var(--bg); border: 1px solid var(--line); box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  }
+  #concerts .cal__menu a { padding: 9px 12px; border-radius: 6px; font-size: 14px; text-decoration: none; color: var(--ink); white-space: nowrap; }
+  #concerts .cal__menu a:hover { background: var(--soft); }
+
   /* Название концерта, по которому открываются подробности */
   #concerts .concert__more {
     display: inline; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; text-align: left;
@@ -220,15 +259,23 @@ const jsonLd = upcoming.map((c) => ({
     #concerts .concert { grid-template-columns: 76px minmax(0, 1fr); gap: 10px 16px; align-items: start; }
     #concerts .concert__meta { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
     #concerts .concert__day { font-size: 28px; }
+    /* На телефоне меню открывается от левого края строки с кнопками, чтобы не уходить за экран */
+    #concerts .concert__meta { position: relative; }
+    #concerts .cal { position: static; }
+    #concerts .cal__menu { right: auto; left: 0; }
   }
 </style>
 
 <script>
   import { parseCsv, rowsToConcerts, hasDetails } from '../lib/concerts-csv';
+  import { calendarId, googleCalendarUrl, icsText, type CalendarOpts } from '../lib/calendar';
   import type { Concert } from '../lib/concerts';
 
 
-  interface Labels { locale: string; pastLimit: number; pastVisible: number; tickets: string; more: string; types: Record<string, string> }
+  interface Labels {
+    locale: string; pastLimit: number; pastVisible: number; tickets: string; more: string; types: Record<string, string>;
+    cal: CalendarOpts & { base: string; ids: string[]; add: string; ics: string; google: string };
+  }
 
   const section = document.querySelector<HTMLElement>('[data-concerts]');
   const tablist = section?.querySelector<HTMLElement>('[data-concert-tabs]');
@@ -335,6 +382,47 @@ const jsonLd = upcoming.map((c) => ({
       return node;
     };
 
+    // «Добавить в календарь» для перерисованной карточки: файл со сборки, если он есть,
+    // иначе (концерт добавлен в таблицу после сборки) — файл, собранный прямо в браузере
+    const CAL_ICON =
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5" fill="none" stroke="currentColor" stroke-width="1.6" /></svg>';
+    const calendarMenu = (c: Concert) => {
+      const details = el('details', 'cal');
+      const summary = el('summary', 'cal__btn');
+      summary.setAttribute('aria-label', labels.cal.add);
+      summary.title = labels.cal.add;
+      summary.innerHTML = CAL_ICON; // постоянная разметка иконки, данных из таблицы в ней нет
+      const menu = el('div', 'cal__menu');
+      const id = calendarId(c);
+      const ics = el('a', '', labels.cal.ics) as HTMLAnchorElement;
+      if (labels.cal.ids.includes(id)) ics.href = `${labels.cal.base}${id}.ics`;
+      else {
+        ics.href = URL.createObjectURL(new Blob([icsText(c, labels.cal)], { type: 'text/calendar' }));
+        ics.download = `${id}.ics`;
+      }
+      const google = el('a', '', labels.cal.google) as HTMLAnchorElement;
+      google.href = googleCalendarUrl(c, labels.cal);
+      google.target = '_blank';
+      google.rel = 'noopener';
+      menu.append(ics, google);
+      details.append(summary, menu);
+      return details;
+    };
+
+    // Открыто только одно меню; клик мимо или Esc закрывает
+    document.addEventListener('click', (e) => {
+      section.querySelectorAll<HTMLDetailsElement>('.cal[open]').forEach((d) => {
+        if (!d.contains(e.target as Node)) d.open = false;
+      });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      section.querySelectorAll<HTMLDetailsElement>('.cal[open]').forEach((d) => {
+        d.open = false;
+        d.querySelector('summary')?.focus();
+      });
+    });
+
     const card = (c: Concert) => {
       const d = new Date(`${c.date}T12:00:00`);
       const fmt = (o: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(labels.locale, o).format(d).replace('.', '');
@@ -368,6 +456,7 @@ const jsonLd = upcoming.map((c) => ({
         a.rel = 'noopener';
         meta.append(a);
       }
+      if (c.date >= today) meta.append(calendarMenu(c));
 
       li.append(date, info, meta);
       return li;
