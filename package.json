@@ -17,5 +17,8 @@
     "@fontsource/golos-text": "5.3.0",
     "@fontsource/prata": "5.3.0",
     "astro": "7.4.2"
+  },
+  "devDependencies": {
+    "fontkitten": "1.0.3"
   }
 }

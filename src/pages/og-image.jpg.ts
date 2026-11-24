@@ -7,12 +7,11 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import site from '../data/site.json';
 import { logoMarkup, LOGO_VIEWBOX } from '../lib/logo';
+import { loadFont, textOutline } from '../lib/text-outline';
 
 const W = 1200;
 const H = 630;
 const HALF = 600;
-
-const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
 async function portraitBuffer(): Promise<Buffer | null> {
   const dir = join(process.cwd(), 'src/assets/portrait');
@@ -24,16 +23,32 @@ async function portraitBuffer(): Promise<Buffer | null> {
   }
 }
 
+/** Портрет в правую половину: по ширине, а лишнюю высоту срезаем на 40% сверху / 60% снизу —
+ *  над головой остаётся воздух, а скрипка в руках не обрезается (у вертикального портрета лицо в верхней трети). */
+async function cropPortrait(buf: Buffer): Promise<Buffer> {
+  const img = sharp(buf).rotate();
+  const { width = HALF, height = H } = await img.metadata();
+  if (width / height > HALF / H) return img.resize(HALF, H, { fit: 'cover' }).toBuffer();
+  const scaledH = Math.round((height * HALF) / width);
+  const top = Math.round((scaledH - H) * 0.4);
+  return sharp(await img.resize(HALF).toBuffer()).extract({ left: 0, top, width: HALF, height: H }).toBuffer();
+}
+
 export const GET: APIRoute = async () => {
   const [first, ...rest] = site.name.ru.split(' ');
+  // Текст — контурами шрифтов сайта (Prata для имени, Golos Text для подписей): на сервере сборки
+  // этих шрифтов нет, и обычный <text> вышел бы запасным шрифтом
+  const [prata, golos, golosMedium] = await Promise.all([
+    loadFont('prata', 400), loadFont('golos-text', 400), loadFont('golos-text', 500),
+  ]);
   const textSvg = `
     <svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">
       <rect width="${W}" height="${H}" fill="#f6ead6"/>
       <svg x="66" y="40" width="83" height="120" viewBox="${LOGO_VIEWBOX}">${logoMarkup('og', { accent: '#a0561b', ink: '#221f1b' })}</svg>
-      <text x="72" y="250" font-family="Georgia, 'DejaVu Serif', 'Times New Roman', serif" font-size="88" fill="#a0561b">${esc(first)}</text>
-      <text x="72" y="350" font-family="Georgia, 'DejaVu Serif', 'Times New Roman', serif" font-size="88" fill="#a0561b">${esc(rest.join(' '))}</text>
-      <text x="74" y="430" font-family="'DejaVu Sans', Arial, sans-serif" font-size="30" fill="#5b3a14">Скрипачка · концерты и уроки</text>
-      <text x="74" y="474" font-family="'DejaVu Sans', Arial, sans-serif" font-size="26" fill="#8a6a45">${esc(site.name.en)} · violinist</text>
+      ${textOutline(first, prata, 96, 70, 262, '#a0561b')}
+      ${textOutline(rest.join(' '), prata, 96, 70, 372, '#a0561b')}
+      ${textOutline('Скрипачка · концерты и уроки', golosMedium, 30, 74, 440, '#5b3a14')}
+      ${textOutline(`${site.name.en} · violinist`, golos, 26, 74, 482, '#8a6a45')}
       <g stroke="#5b3a14" stroke-opacity="0.25">
         ${Array.from({ length: 5 }, (_, i) => `<line x1="72" x2="520" y1="${540 + i * 7}" y2="${540 + i * 7}" stroke-width="1.5"/>`).join('')}
       </g>
@@ -41,7 +56,7 @@ export const GET: APIRoute = async () => {
 
   const portrait = await portraitBuffer();
   const right = portrait
-    ? await sharp(portrait).resize(HALF, H, { fit: 'cover', position: 'attention' }).toBuffer()
+    ? await cropPortrait(portrait)
     : await sharp(Buffer.from(`
         <svg width="${HALF}" height="${H}" viewBox="0 0 ${HALF} ${H}" xmlns="http://www.w3.org/2000/svg">
           <rect width="${HALF}" height="${H}" fill="#221f1b"/>
