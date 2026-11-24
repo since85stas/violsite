@@ -162,8 +162,12 @@ const nextDate = next
       /* Временная шкала — по рамке: сама рамка с overflow: hidden для картинки считается
          прокручиваемым блоком, и view() у картинки никогда бы не сдвинулся */
       .hero__portrait { view-timeline: --hero-portrait block; }
+      /* Только отдельные свойства: сокращённое animation минификатор сборки склеивает
+         с animation-timeline и выбрасывает оба (в dev-режиме этого не видно) */
       .hero__portrait :global(img) {
-        animation: hero-parallax linear both;
+        animation-name: hero-parallax;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
         animation-timeline: --hero-portrait;
         animation-range: exit 0% exit 100%;
       }
