@@ -13,6 +13,7 @@ const { lang, upcoming, past } = Astro.props;
 const t = useTranslations(lang);
 const locale = lang === 'ru' ? 'ru-RU' : 'en-GB';
 const PAST_LIMIT = 12;
+const PAST_VISIBLE = 3; // остальные прошедшие — по кнопке «Показать все»
 
 const parts = (c: Concert) => {
   const d = new Date(`${c.date}T12:00:00`);
@@ -36,6 +37,7 @@ const csvUrl = /^https?:\/\//i.test(import.meta.env.CONCERTS_CSV_URL ?? '') ? im
 const labels = {
   locale,
   pastLimit: PAST_LIMIT,
+  pastVisible: PAST_VISIBLE,
   tickets: t('concerts.tickets'),
   types: Object.fromEntries(CONCERT_TYPES.map((k) => [k, t(`concerts.type.${k}`)])),
 };
@@ -103,6 +105,11 @@ const jsonLd = upcoming.map((c) => ({
           })}
         </ul>
         <p class="clist__empty muted" hidden={l.items.length > 0} data-empty>{l.empty}</p>
+        {l.id === 'past' && (
+          <div class="show-all" hidden data-past-more>
+            <button type="button" class="btn"><span>{t('concerts.showAll')} · <span data-past-count></span></span></button>
+          </div>
+        )}
       </div>
     ))}
   </div>
@@ -125,6 +132,7 @@ const jsonLd = upcoming.map((c) => ({
     display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 24px; align-items: center;
     padding: 22px 0; border-bottom: 1px solid var(--line);
   }
+  #concerts .concert[hidden] { display: none; }
   #concerts .concert__date { display: flex; flex-direction: column; font-variant-numeric: tabular-nums; }
   #concerts .concert__day { font-family: var(--display); font-size: 32px; line-height: 1; margin-bottom: 4px; }
   #concerts .concert__month { font-size: 13px; color: var(--muted); }
@@ -149,7 +157,7 @@ const jsonLd = upcoming.map((c) => ({
   import { parseCsv, rowsToConcerts } from '../lib/concerts-csv';
   import type { Concert } from '../lib/concerts';
 
-  interface Labels { locale: string; pastLimit: number; tickets: string; types: Record<string, string> }
+  interface Labels { locale: string; pastLimit: number; pastVisible: number; tickets: string; types: Record<string, string> }
 
   const section = document.querySelector<HTMLElement>('[data-concerts]');
   const tablist = section?.querySelector<HTMLElement>('[data-concert-tabs]');
@@ -182,10 +190,27 @@ const jsonLd = upcoming.map((c) => ({
     const pastList = section.querySelector<HTMLElement>('[data-list="past"]')!;
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Moscow' }).format(new Date());
 
+    // Прошедшие: сначала видны только последние pastVisible, остальные — по кнопке «Показать все»
+    const pastMore = section.querySelector<HTMLElement>('[data-past-more]');
+    let pastOpen = false;
+    pastMore?.querySelector('button')?.addEventListener('click', () => {
+      pastOpen = true;
+      updateEmpty();
+      pastList.querySelector<HTMLElement>(`li:nth-child(${labels.pastVisible + 1})`)?.scrollIntoView({ block: 'nearest' });
+    });
+
     const updateEmpty = () => {
       for (const list of [upcomingList, pastList]) {
         const empty = list.parentElement?.querySelector<HTMLElement>('[data-empty]');
         if (empty) empty.hidden = list.children.length > 0;
+      }
+      const past = Array.from(pastList.children) as HTMLElement[];
+      const collapse = !pastOpen && past.length > labels.pastVisible;
+      past.forEach((li, i) => (li.hidden = collapse && i >= labels.pastVisible));
+      if (pastMore) {
+        pastMore.hidden = !collapse;
+        const count = pastMore.querySelector('[data-past-count]');
+        if (count) count.textContent = String(past.length);
       }
     };
 

@@ -1,0 +1,85 @@
+---
+// Лента «Сцены и фестивали»: монохромные логотипы залов и фестивалей из биографии.
+// Логотип — src/assets/venues/<id>.svg, вставляется в разметку и красится в цвет текста.
+// Нет файла — название набирается шрифтом заголовков, чтобы лента не пустовала.
+import { type Lang, useTranslations, pick } from '../i18n/ui';
+import type { ImageMetadata } from 'astro';
+import venues from '../data/venues.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const files = import.meta.glob<string>('../assets/venues/*.svg', { query: '?raw', import: 'default', eager: true });
+const logoFor = (id: string) => {
+  const svg = files[`../assets/venues/${id}.svg`];
+  if (!svg) return undefined;
+  // Размер задаёт CSS; убираем фиксированные width/height и пролог XML
+  return svg
+    .replace(/<\?xml[^>]*>/, '')
+    .replace(/<svg\b([^>]*)>/, (_, attrs: string) =>
+      `<svg${attrs.replace(/\s(width|height)="[^"]*"/g, '')} aria-hidden="true" focusable="false">`);
+};
+
+// PNG (когда у организации нет вектора): красим маской по прозрачности, тем же цветом, что и SVG.
+const pngs = import.meta.glob<{ default: ImageMetadata }>('../assets/venues/*.png', { eager: true });
+const pngFor = (id: string) => pngs[`../assets/venues/${id}.png`]?.default;
+
+const items = venues.items.map((v) => ({ name: pick(v.name, lang), logo: logoFor(v.id), png: pngFor(v.id) }));
+---
+<div class="venues">
+  <div class="eyebrow venues__label">{t('about.venues')}</div>
+  <ul class="venues__list">
+    {items.map((v) => (
+      <li class="venues__item" title={v.name}>
+        {v.logo ? (
+          <>
+            <span class="venues__logo" set:html={v.logo} />
+            <span class="visually-hidden">{v.name}</span>
+          </>
+        ) : v.png ? (
+          <>
+            <span
+              class="venues__logo venues__logo--png"
+              style={`--logo: url(${v.png.src}); aspect-ratio: ${v.png.width} / ${v.png.height}`}
+              aria-hidden="true"
+            />
+            <span class="visually-hidden">{v.name}</span>
+          </>
+        ) : (
+          <span class="venues__word">{v.name}</span>
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .venues { grid-column: 1 / -1; padding-top: 28px; border-top: 1px solid var(--line); }
+  .venues__label { margin-bottom: 18px; }
+  .venues__list {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px 36px;
+    color: var(--muted);
+  }
+  .venues__item { display: flex; align-items: center; min-height: 36px; }
+  .venues__word {
+    font-family: var(--display); font-size: 17px; line-height: 1.2; letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .venues__logo { display: flex; }
+  .venues__logo :global(svg) { height: 32px; width: auto; max-width: 160px; fill: currentColor; }
+  .venues__logo--png {
+    height: 32px; max-width: 160px; background: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat;
+  }
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  @media (max-width: 820px) {
+    .venues__list { gap: 10px 24px; }
+    .venues__word { font-size: 15px; white-space: normal; }
+    .venues__logo :global(svg), .venues__logo--png { height: 26px; }
+  }
+</style>

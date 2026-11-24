@@ -1,13 +1,6 @@
 {
-  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. caption на сайте не показывается — это текст для незрячих и поисковиков (alt); meta (площадка, год) видна в просмотре фото. Пустой file — показывается заглушка.",
+  "_comment": "Галерея: file — имя файла в src/assets/gallery/, category — concert | lessons | portrait, size — '' | tall | wide. caption на сайте не показывается — это текст для незрячих и поисковиков (alt); meta (площадка, год) видна в просмотре фото. Пустой file — показывается заглушка. Первые 6 фото видны сразу (подобраны так, чтобы сетка была без дыр: 2 tall + 4 обычных), остальные — по кнопке «Показать все».",
   "items": [
-    {
-      "file": "portrait-01.jpg",
-      "category": "portrait",
-      "size": "wide",
-      "caption": { "ru": "Скрипка в сосновом лесу", "en": "Violin in a pine forest" },
-      "meta": { "ru": "", "en": "" }
-    },
     {
       "file": "concert-01.jpg",
       "category": "concert",
@@ -16,10 +9,10 @@
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "concert-14.jpg",
-      "category": "concert",
+      "file": "portrait-01.jpg",
+      "category": "portrait",
       "size": "",
-      "caption": { "ru": "Камерный концерт в картинной галерее", "en": "Chamber concert in an art gallery" },
+      "caption": { "ru": "Скрипка в сосновом лесу", "en": "Violin in a pine forest" },
       "meta": { "ru": "", "en": "" }
     },
     {
@@ -30,17 +23,38 @@
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "concert-11.jpg",
-      "category": "concert",
+      "file": "portrait-07.jpg",
+      "category": "portrait",
       "size": "tall",
-      "caption": { "ru": "В историческом костюме", "en": "In historical costume" },
+      "caption": { "ru": "Осенний портрет со скрипкой", "en": "Autumn portrait with the violin" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-15.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Соло на сцене", "en": "Solo on stage" },
       "meta": { "ru": "", "en": "" }
     },
     {
       "file": "concert-16.jpg",
       "category": "concert",
-      "size": "wide",
+      "size": "",
       "caption": { "ru": "Трио на сцене", "en": "Trio on stage" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-14.jpg",
+      "category": "concert",
+      "size": "",
+      "caption": { "ru": "Камерный концерт в картинной галерее", "en": "Chamber concert in an art gallery" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
+      "file": "concert-11.jpg",
+      "category": "concert",
+      "size": "tall",
+      "caption": { "ru": "В историческом костюме", "en": "In historical costume" },
       "meta": { "ru": "", "en": "" }
     },
     {
@@ -65,24 +79,10 @@
       "meta": { "ru": "", "en": "" }
     },
     {
-      "file": "portrait-07.jpg",
-      "category": "portrait",
-      "size": "tall",
-      "caption": { "ru": "Осенний портрет со скрипкой", "en": "Autumn portrait with the violin" },
-      "meta": { "ru": "", "en": "" }
-    },
-    {
       "file": "concert-06.jpg",
       "category": "concert",
       "size": "",
       "caption": { "ru": "Концерт в музее", "en": "Concert at a museum" },
-      "meta": { "ru": "", "en": "" }
-    },
-    {
-      "file": "concert-15.jpg",
-      "category": "concert",
-      "size": "",
-      "caption": { "ru": "Соло на сцене", "en": "Solo on stage" },
       "meta": { "ru": "", "en": "" }
     },
     {

@@ -1,0 +1,14 @@
+{
+  "_comment": "Лента «Сцены и фестивали» в блоке «О себе». Логотип — src/assets/venues/<id>.svg (одноцветный); нет файла — название набирается шрифтом сайта.",
+  "items": [
+    { "id": "berliner-philharmonie", "name": { "ru": "Берлинская филармония", "en": "Berliner Philharmonie" } },
+    { "id": "champs-elysees", "name": { "ru": "Théâtre des Champs-Élysées", "en": "Théâtre des Champs-Élysées" } },
+    { "id": "la-fenice", "name": { "ru": "Teatro La Fenice", "en": "Teatro La Fenice" } },
+    { "id": "zaryadye", "name": { "ru": "Зарядье", "en": "Zaryadye Hall" } },
+    { "id": "shmf", "name": { "ru": "Schleswig-Holstein Musik Festival", "en": "Schleswig-Holstein Musik Festival" } },
+    { "id": "baltic-sea-philharmonic", "name": { "ru": "Baltic Sea Philharmonic", "en": "Baltic Sea Philharmonic" } },
+    { "id": "miami-summer", "name": { "ru": "Miami Summer Music Festival", "en": "Miami Summer Music Festival" } },
+    { "id": "musica-iberica", "name": { "ru": "Musica Iberica", "en": "Musica Iberica" } },
+    { "id": "moscow-baroque", "name": { "ru": "Московское барокко", "en": "Moscow Baroque" } }
+  ]
+}

@@ -14,6 +14,8 @@ const filters = (['all', 'concert', 'lessons', 'portrait'] as const).filter(
   (f) => f === 'all' || used.has(f as GalleryCategory),
 );
 const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
+// Сразу видны первые фото из gallery.json, остальные — по кнопке «Показать все»
+const FEATURED = 6;
 ---
 {photos.length > 0 && (
   <section class="section" id="gallery">
@@ -36,7 +38,7 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
 
       <ul class="gallery" data-gallery>
         {photos.map((p, i) => (
-          <li class:list={['gallery__item', p.size && `gallery__item--${p.size}`]} data-category={p.category}>
+          <li class:list={['gallery__item', p.size && `gallery__item--${p.size}`]} data-category={p.category} data-extra={i >= FEATURED || undefined}>
             <button
               type="button"
               class="gallery__open"
@@ -51,6 +53,11 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
           </li>
         ))}
       </ul>
+      {photos.length > FEATURED && (
+        <div class="show-all" hidden data-gallery-more>
+          <button type="button" class="btn">{t('gallery.showAll')} · {photos.length}</button>
+        </div>
+      )}
     </div>
 
     <dialog class="lightbox" aria-label={t('gallery.viewer')} data-lightbox>
@@ -90,6 +97,8 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
   }
   .gallery__item { border-radius: 4px; overflow: hidden; background: var(--soft); }
   .gallery__item[hidden] { display: none; }
+  /* Свёрнуто (класс ставит скрипт — без JS видны все фото) */
+  .gallery.is-collapsed > [data-extra] { display: none; }
   .gallery__item--tall { grid-row: span 2; }
   .gallery__item--wide { grid-column: span 2; }
   .gallery__open { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
@@ -147,18 +156,35 @@ const categoryName = (c: GalleryCategory) => t(`gallery.${c}`);
     let current = 0;
     let opener: HTMLElement | null = null;
 
-    // Фильтры
+    // «Показать все»: свёрнутая сетка прячет фото с data-extra
+    const more = document.querySelector<HTMLElement>('[data-gallery-more]');
+    const firstExtra = items.findIndex((li) => li.dataset.extra !== undefined);
+    const expand = () => {
+      grid.classList.remove('is-collapsed');
+      if (more) more.hidden = true;
+    };
+    if (more && firstExtra > -1) {
+      grid.classList.add('is-collapsed');
+      more.hidden = false;
+      more.querySelector('button')!.addEventListener('click', () => {
+        expand();
+        buttons[firstExtra].focus({ preventScroll: true });
+      });
+    }
+
+    // Фильтры (выбор категории раскрывает все фото этой категории)
     const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-gallery-filters] [data-filter]'));
     filterBtns.forEach((btn) =>
       btn.addEventListener('click', () => {
         const f = btn.dataset.filter;
+        if (f !== 'all') expand();
         filterBtns.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
         items.forEach((li) => (li.hidden = !(f === 'all' || li.dataset.category === f)));
       }),
     );
 
-    // Просмотр листает только видимые (с учётом фильтра) фото
-    const visible = () => buttons.filter((_, i) => !items[i].hidden);
+    // Просмотр листает только видимые (с учётом фильтра и «Показать все») фото
+    const visible = () => buttons.filter((_, i) => items[i].getClientRects().length > 0);
 
     const show = (btn: HTMLButtonElement) => {
       const list = visible();

@@ -26,6 +26,7 @@ export const ui = {
     'hero.quickMsg': 'Здравствуйте, Елена! Хочу записаться на пробный урок скрипки.',
 
     'about.eyebrow': 'О себе',
+    'about.venues': 'Сцены и фестивали',
     'concerts.eyebrow': 'Афиша',
     'concerts.title': 'Концерты',
     'concerts.upcoming': 'Предстоящие',
@@ -33,6 +34,7 @@ export const ui = {
     'concerts.tickets': 'Билеты',
     'concerts.empty': 'Новые концерты скоро появятся',
     'concerts.pastEmpty': 'Здесь появятся прошедшие концерты',
+    'concerts.showAll': 'Показать все прошедшие',
     'concerts.type.solo': 'Сольный',
     'concerts.type.orchestra': 'С оркестром',
     'concerts.type.chamber': 'Камерный',
@@ -54,6 +56,7 @@ export const ui = {
     'gallery.close': 'Закрыть',
     'gallery.prev': 'Предыдущее фото',
     'gallery.next': 'Следующее фото',
+    'gallery.showAll': 'Показать все фото',
 
     'lessons.eyebrow': 'Уроки скрипки',
     'lessons.prices': 'Стоимость',
@@ -114,6 +117,7 @@ export const ui = {
     'hero.quickMsg': 'Hello Elena! I would like to book a trial violin lesson.',
 
     'about.eyebrow': 'About',
+    'about.venues': 'Stages & festivals',
     'concerts.eyebrow': 'Schedule',
     'concerts.title': 'Concerts',
     'concerts.upcoming': 'Upcoming',
@@ -121,6 +125,7 @@ export const ui = {
     'concerts.tickets': 'Tickets',
     'concerts.empty': 'New dates coming soon',
     'concerts.pastEmpty': 'Past concerts will appear here',
+    'concerts.showAll': 'Show all past concerts',
     'concerts.type.solo': 'Recital',
     'concerts.type.orchestra': 'With orchestra',
     'concerts.type.chamber': 'Chamber',
@@ -142,6 +147,7 @@ export const ui = {
     'gallery.close': 'Close',
     'gallery.prev': 'Previous photo',
     'gallery.next': 'Next photo',
+    'gallery.showAll': 'Show all photos',
 
     'lessons.eyebrow': 'Violin lessons',
     'lessons.prices': 'Prices',

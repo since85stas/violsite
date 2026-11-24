@@ -89,6 +89,10 @@ p { margin: 0; }
 .btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .btn--primary:hover { background: var(--accent); filter: brightness(1.07); }
 
+/* «Показать все» под свёрнутым списком (галерея, прошедшие концерты) */
+.show-all { display: flex; justify-content: center; margin-top: 28px; }
+.show-all[hidden] { display: none; }
+
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
