@@ -1,9 +1,26 @@
 {
-  "_comment": "Отзывы публикуются только с разрешения автора.",
+  "_comment": "Отзывы публикуются только с разрешения автора. Текст — без внешних кавычек (их ставит сайт). author — только то, что известно об авторе: имена и возраст не придумывать, вписать настоящие, когда автор согласится.",
   "items": [
     {
-      "text": { "ru": "TODO: текст отзыва", "en": "TODO: review text" },
-      "author": { "ru": "Имя, кто занимается", "en": "Name, student type" }
+      "text": {
+        "ru": "Прекрасный, чуткий педагог с сильной академической базой. Помимо игры на скрипке, помогает разобраться с сольфеджио и теорией музыки, что сильно экономит время при подготовке домашних заданий. Рекомендую как начинающим, так и тем, кто хочет улучшить технику.",
+        "en": "A wonderful, sensitive teacher with a strong academic background. Besides the violin, she helps with solfège and music theory, which saves a lot of time on homework. I recommend her both to beginners and to those who want to improve their technique."
+      },
+      "author": { "ru": "Скрипка, сольфеджио и теория музыки", "en": "Violin, solfège and music theory" }
+    },
+    {
+      "text": {
+        "ru": "Всегда мечтал научиться играть на скрипке, но боялся начинать во взрослом возрасте. С Еленой Сергеевной страх ушел на первом же уроке. Занятия проходят в комфортном темпе, без лишнего давления, при этом педагог очень чутко следит за интонацией и звукоизвлечением. Спустя пару месяцев уже получается чисто играть первые простые мелодии.",
+        "en": "I always dreamed of learning the violin but was afraid to start as an adult. With Elena the fear was gone after the very first lesson. Lessons go at a comfortable pace, without pressure, yet she pays close attention to intonation and tone production. After a couple of months I can already play my first simple melodies in tune."
+      },
+      "author": { "ru": "Взрослый ученик, начал с нуля, занимается пару месяцев", "en": "Adult student, started from scratch, studying for a couple of months" }
+    },
+    {
+      "text": {
+        "ru": "Занимаемся с Еленой Сергеевной уже несколько месяцев, подтягиваем программу музыкальной школы. Педагог сразу нашла общий язык с ребенком, объясняет сложные технические моменты простым и понятным языком. Постановка рук стала заметно свободнее, появился интерес к занятиям. Очень благодарны за терпение и внимательный подход.",
+        "en": "We have been working with Elena for several months, catching up on the music school programme. She found common ground with our child straight away and explains difficult technical points in simple, clear language. The hand position has become noticeably freer, and our child now enjoys practising. We are very grateful for her patience and attentive approach."
+      },
+      "author": { "ru": "Родители ученика музыкальной школы, занимаются несколько месяцев", "en": "Parents of a music school student, studying for several months" }
     }
   ]
 }
