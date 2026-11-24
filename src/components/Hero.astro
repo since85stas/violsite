@@ -55,8 +55,8 @@ const nextDate = next
         </div>
       )}
       {next && (
-        <a class="hero__next" href="#concerts">
-          <span class="eyebrow">{t('hero.next')}</span>
+        <a class="hero__next" href="#concerts" data-hero-next={next.date}>
+          <span class="eyebrow hero__next-label"><span class="hero__dot" aria-hidden="true"></span>{t('hero.next')}</span>
           <span><strong>{nextDate}</strong> · {next.city}, {next.venue}</span>
         </a>
       )}
@@ -93,6 +93,13 @@ const nextDate = next
   </div>
 </section>
 
+<script>
+  // Сайт пересобирается не каждый день: если «ближайший» концерт уже прошёл — прячем строку.
+  const nextLink = document.querySelector<HTMLElement>('[data-hero-next]');
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Moscow' }).format(new Date());
+  if (nextLink && (nextLink.dataset.heroNext ?? '') < today) nextLink.hidden = true;
+</script>
+
 <style>
   .hero { padding-block: 56px 72px; }
   .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
@@ -126,7 +133,23 @@ const nextDate = next
     display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline;
     font-size: 15px; text-decoration: none;
   }
+  .hero__next[hidden] { display: none; }
   .hero__next strong { font-weight: 500; }
+  .hero__next-label { display: inline-flex; align-items: center; gap: 10px; }
+  /* Пульсирующая точка привлекает внимание к ближайшему концерту. Без анимации — просто точка. */
+  .hero__dot {
+    position: relative; flex: none; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+  }
+  .hero__dot::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: var(--accent); animation: hero-pulse 2s ease-out infinite;
+  }
+  @keyframes hero-pulse {
+    from { transform: scale(1); opacity: 0.6; }
+    to { transform: scale(3); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hero__dot::after { animation: none; opacity: 0; } }
   .hero__next:hover span:last-child { text-decoration: underline; text-underline-offset: 3px; }
 
   .hero__portrait { aspect-ratio: 4 / 5; max-width: 100%; border-radius: 4px; overflow: hidden; background: var(--soft); border: 1px solid var(--line); }
