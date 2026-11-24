@@ -27,6 +27,8 @@ export const ui = {
 
     'about.eyebrow': 'О себе',
     'about.venues': 'Сцены и фестивали',
+    'about.more': 'Читать дальше',
+    'about.less': 'Свернуть',
     'concerts.eyebrow': 'Афиша',
     'concerts.title': 'Концерты',
     'concerts.upcoming': 'Предстоящие',
@@ -129,6 +131,8 @@ export const ui = {
 
     'about.eyebrow': 'About',
     'about.venues': 'Stages & festivals',
+    'about.more': 'Read more',
+    'about.less': 'Show less',
     'concerts.eyebrow': 'Schedule',
     'concerts.title': 'Concerts',
     'concerts.upcoming': 'Upcoming',

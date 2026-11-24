@@ -15,7 +15,16 @@ const [first, ...rest] = pick(about.paragraphs, lang);
       <div class="eyebrow">{t('about.eyebrow')}</div>
       <h2>{pick(about.title, lang)}</h2>
       {first && <p>{first}</p>}
-      {rest.map((p) => <p class="muted">{p}</p>)}
+      {rest.length > 0 && (
+        <>
+          <!-- Остальная биография — под «Читать дальше». Без JS видна целиком (класс скрытия ставит скрипт). -->
+          <div class="about__more" id="about-more" data-about-more>
+            {rest.map((p) => <p class="muted">{p}</p>)}
+          </div>
+          <button type="button" class="about__toggle" aria-controls="about-more" aria-expanded="true" hidden data-about-toggle
+            data-more={t('about.more')} data-less={t('about.less')}>{t('about.more')}</button>
+        </>
+      )}
     </div>
     <dl class="about__facts">
       {about.facts.map((f) => (
@@ -37,7 +46,42 @@ const [first, ...rest] = pick(about.paragraphs, lang);
   .about__fact { display: flex; flex-direction: column-reverse; gap: 6px; }
   .about__fact dd { margin: 0; font-family: var(--display); font-size: 38px; line-height: 1; font-variant-numeric: tabular-nums; }
   .about__fact dt { font-size: 14px; color: var(--muted); }
+  .about__more { display: flex; flex-direction: column; gap: 16px; }
+  .about__more.is-collapsed { display: none; }
+  .about__toggle {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 8px;
+    padding: 0; border: 0; background: none; font: inherit; font-size: 15px; font-weight: 500;
+    color: var(--accent); cursor: pointer;
+  }
+  .about__toggle[hidden] { display: none; }
+  .about__toggle::after {
+    content: ''; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg); transition: transform 0.2s ease;
+  }
+  .about__toggle[aria-expanded='true']::after { transform: translateY(2px) rotate(-135deg); }
+  .about__toggle:hover { text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 820px) {
     .about { grid-template-columns: 1fr; gap: 36px; }
   }
 </style>
+
+<script>
+  // «Читать дальше»: сворачиваем остальную биографию, кнопка разворачивает и сворачивает обратно
+  const more = document.querySelector<HTMLElement>('[data-about-more]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-about-toggle]');
+  if (more && toggle) {
+    const set = (open: boolean) => {
+      more.classList.toggle('is-collapsed', !open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = (open ? toggle.dataset.less : toggle.dataset.more) ?? '';
+    };
+    set(false);
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      set(open);
+      // после сворачивания — вернуть кнопку в поле зрения, если текст был длинным
+      if (!open) toggle.scrollIntoView({ block: 'nearest' });
+    });
+  }
+</script>
