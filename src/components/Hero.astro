@@ -116,7 +116,7 @@ const nextDate = next
 
 <style>
   .hero { padding-block: 56px 72px; }
-  .hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center; }
   .hero__text { min-width: 0; }
   /* Имя — главный заголовок: крупнее и в акцентном цвете; фраза — подзаголовок */
   .hero__name {
@@ -221,7 +221,7 @@ const nextDate = next
     .hero__text { display: contents; }
     .hero__text > * { grid-column: 1 / -1; }
     .hero__text > .hero__name { grid-column: 1; grid-row: 2; font-size: clamp(34px, 10.5vw, 64px); }
-    .hero__portrait { grid-column: 2; grid-row: 2; width: min(36vw, 220px); margin-top: 16px; }
+    .hero__portrait { grid-column: 2; grid-row: 2; width: min(42vw, 260px); margin-top: 16px; }
     .hero__lead { font-size: 17px; }
   }
 </style>
