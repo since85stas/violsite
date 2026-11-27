@@ -1,5 +1,8 @@
 ---
 // Для организаторов: текст, пресс-кит и репертуар (PDF), контакты.
+// Кнопка PDF показывается, только если файл лежит в public/ (site.json → files), иначе была бы 404.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { type Lang, useTranslations } from '../i18n/ui';
 import site from '../data/site.json';
 import { withBase } from '../lib/url';
@@ -11,9 +14,15 @@ const t = useTranslations(lang);
 const c = site.contacts;
 const s = site.social;
 
+const hasFile = (path: string) => !!path && existsSync(join(process.cwd(), 'public', path));
+const files = [
+  hasFile(site.files.presskit) && { href: site.files.presskit, label: t('org.presskit') },
+  hasFile(site.files.repertoire) && { href: site.files.repertoire, label: t('org.repertoire') },
+].filter(Boolean) as { href: string; label: string }[];
+
 const text = {
-  ru: 'Сольные программы, выступления с оркестром, камерные концерты и частные мероприятия. Пресс-кит и репертуарный список — по кнопкам ниже.',
-  en: 'Solo recitals, concertos with orchestra, chamber music and private events. Press kit and repertoire list are available below.',
+  ru: 'Сольные программы, выступления с оркестром, камерные концерты и частные мероприятия.' + (files.length ? ' Пресс-кит и репертуарный список — по кнопкам ниже.' : ''),
+  en: 'Solo recitals, concertos with orchestra, chamber music and private events.' + (files.length ? ' Press kit and repertoire list are available below.' : ''),
 }[lang];
 
 const labels = {
@@ -37,10 +46,11 @@ const contacts = [
       <div class="eyebrow">{t('org.eyebrow')}</div>
       <h2>{t('org.title')}</h2>
       <p class="muted">{text}</p>
-      <div class="org__files">
-        <a class="btn" href={withBase(site.files.presskit)} target="_blank" rel="noopener">{t('org.presskit')}</a>
-        <a class="btn" href={withBase(site.files.repertoire)} target="_blank" rel="noopener">{t('org.repertoire')}</a>
-      </div>
+      {files.length > 0 && (
+        <div class="org__files">
+          {files.map((f) => <a class="btn" href={withBase(f.href)} target="_blank" rel="noopener">{f.label}</a>)}
+        </div>
+      )}
     </div>
     <ul class="org__contacts">
       {contacts.map((item) => (

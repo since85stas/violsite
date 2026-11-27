@@ -67,9 +67,8 @@ const links = [
     position: sticky;
     top: env(safe-area-inset-top, 0px);
     z-index: 50;
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* Сплошной фон: сквозь полупрозрачный при прокрутке проступал текст страницы */
+    background: var(--bg);
     border-bottom: 1px solid var(--line);
   }
   .header__inner { display: flex; align-items: center; gap: 24px; min-height: var(--header-h); }
