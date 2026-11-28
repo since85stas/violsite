@@ -35,6 +35,16 @@ const price = (p: number) => (p > 0 ? fmt.format(p) : t('lessons.priceOnRequest'
       ))}
     </div>
 
+    <div class="prep" id="admission">
+      <div class="prep__lead">
+        <h3>{pick(lessons.prep.title, lang)}</h3>
+        <p>{pick(lessons.prep.text, lang)}</p>
+      </div>
+      <ul class="prep__points">
+        {lessons.prep.points.map((p) => <li>{pick(p, lang)}</li>)}
+      </ul>
+    </div>
+
     <div class="lessons-grid">
       <div class="lessons-info">
         <h3>{t('lessons.prices')}</h3>
@@ -61,7 +71,24 @@ const price = (p: number) => (p > 0 ? fmt.format(p) : t('lessons.priceOnRequest'
   .section--warm :global(.eyebrow) { color: color-mix(in srgb, var(--warm-ink) 70%, transparent); }
   .section--warm h2, .section--warm h3 { color: var(--warm-ink); }
 
-  .audiences { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-bottom: 48px; }
+  .audiences { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
+
+  .prep {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 28px; border-radius: 10px; margin-bottom: 48px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+  }
+  .prep__lead { display: flex; flex-direction: column; gap: 8px; }
+  .prep__lead p { color: color-mix(in srgb, var(--warm-ink) 78%, transparent); font-size: 15px; }
+  .prep__points { list-style: none; margin: 0; padding: 0; align-self: center; }
+  .prep__points li {
+    position: relative; padding: 9px 0 9px 22px; font-size: 15px;
+    border-bottom: 1px solid color-mix(in srgb, var(--warm-ink) 14%, transparent);
+  }
+  .prep__points li:last-child { border-bottom: 0; }
+  .prep__points li::before {
+    content: ''; position: absolute; left: 2px; top: calc(9px + 0.8em); width: 8px; height: 1px;
+    background: var(--warm-ink);
+  }
   .audience {
     display: flex; flex-direction: column; gap: 8px; padding: 22px; border-radius: 10px;
     background: color-mix(in srgb, var(--bg) 55%, transparent);
@@ -91,6 +118,7 @@ const price = (p: number) => (p > 0 ? fmt.format(p) : t('lessons.priceOnRequest'
   }
   @media (max-width: 900px) {
     .audiences { grid-template-columns: 1fr; }
+    .prep { grid-template-columns: 1fr; gap: 16px; padding: 22px; }
     .lessons-grid { grid-template-columns: 1fr; }
   }
 </style>

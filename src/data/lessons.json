@@ -13,6 +13,16 @@
     { "id": "advanced", "title": { "ru": "Продолжающие", "en": "Returning players" }, "text": { "ru": "Для тех, кто занимался раньше и хочет вернуться или двигаться дальше. Звук, интонация, штрихи и пьесы, которые хочется сыграть.", "en": "For those who have played before and want to come back or go further. Tone, intonation, bowing and the pieces you want to play." } },
     { "id": "baroque", "title": { "ru": "Барочная скрипка", "en": "Baroque violin" }, "text": { "ru": "Для тех, кто уже уверенно играет на современной скрипке. Жильные струны, барочный смычок, исторические штрихи и манера исполнения музыки XVII–XVIII веков.", "en": "For players already confident on the modern violin. Gut strings, the Baroque bow, historical bowing and the performance style of 17th–18th-century music." } }
   ],
+  "prep": {
+    "title": { "ru": "Поступление в вуз и конкурсы", "en": "University auditions and competitions" },
+    "text": { "ru": "Готовлю к вступительным экзаменам в музыкальные вузы и к исполнительским конкурсам. Подбираем программу под требования приёмной комиссии или положение конкурса и доводим её до сценической готовности.", "en": "I prepare students for entrance auditions at music universities and conservatoires, and for performance competitions. We choose a programme that meets the audition requirements or competition rules and bring it to concert standard." },
+    "points": [
+      { "ru": "Программа под требования вуза или положение конкурса", "en": "A programme built around the audition requirements or competition rules" },
+      { "ru": "Гаммы, этюды, виртуозные пьесы и крупная форма", "en": "Scales, études, virtuoso pieces and large-scale works" },
+      { "ru": "Стиль, фразировка и собственная интерпретация", "en": "Style, phrasing and a personal interpretation" },
+      { "ru": "Прогоны программы целиком и работа со сценическим волнением", "en": "Full run-throughs and dealing with stage nerves" }
+    ]
+  },
   "prices": [
     { "id": "trial", "label": { "ru": "Пробный урок, 30 минут", "en": "Trial lesson, 30 min" }, "price": 1000, "currency": "RUB" },
     { "id": "45", "label": { "ru": "Урок 45 минут", "en": "Lesson, 45 min" }, "price": 2500, "currency": "RUB" },
@@ -25,7 +35,8 @@
       { "value": "kid-10-16", "label": { "ru": "Ребёнок 10–16 лет", "en": "Child, 10–16" } },
       { "value": "adult-new", "label": { "ru": "Взрослый, с нуля", "en": "Adult, beginner" } },
       { "value": "adult-back", "label": { "ru": "Взрослый, уже играл", "en": "Adult, has played before" } },
-      { "value": "baroque", "label": { "ru": "Барочная скрипка", "en": "Baroque violin" } }
+      { "value": "baroque", "label": { "ru": "Барочная скрипка", "en": "Baroque violin" } },
+      { "value": "prep", "label": { "ru": "Поступление или конкурс", "en": "University audition or competition" } }
     ],
     "daysAhead": 14,
     "skipWeekdays": [0],
