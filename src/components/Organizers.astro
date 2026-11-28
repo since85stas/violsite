@@ -25,15 +25,14 @@ const text = {
 }[lang];
 
 const labels = {
-  ru: { email: 'Почта', phone: 'Телефон', telegram: 'Telegram', whatsapp: 'WhatsApp', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
-  en: { email: 'Email', phone: 'Phone', telegram: 'Telegram', whatsapp: 'WhatsApp', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
+  ru: { email: 'Почта', phone: 'Телефон', telegram: 'Telegram', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
+  en: { email: 'Email', phone: 'Phone', telegram: 'Telegram', youtube: 'YouTube', vk: 'VK', instagram: 'Instagram' },
 }[lang];
 
 const contacts = [
   c.emailConcerts && { label: labels.email, value: c.emailConcerts, href: `mailto:${c.emailConcerts}` },
   c.phone && { label: labels.phone, value: c.phone, href: `tel:${c.phone.replace(/[^\d+]/g, '')}` },
   c.telegram && { label: labels.telegram, value: `@${c.telegram}`, href: `https://t.me/${c.telegram}` },
-  c.whatsapp && { label: labels.whatsapp, value: c.whatsapp, href: `https://wa.me/${c.whatsapp.replace(/\D/g, '')}` },
   s.youtube && { label: labels.youtube, value: 'YouTube', href: s.youtube },
   s.vk && { label: labels.vk, value: 'VK', href: s.vk },
   s.instagram && { label: labels.instagram, value: 'Instagram', href: s.instagram },
