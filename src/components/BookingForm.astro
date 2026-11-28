@@ -1,13 +1,11 @@
 ---
 // Запись на пробный урок без сбора данных на сайте.
 // Посетитель выбирает формат, день, время и кто будет заниматься — скрипт составляет текст,
-// а кнопки открывают MAX / Telegram. Telegram подставляет текст сам; MAX так не умеет — по клику
-// текст копируется в буфер обмена, посетитель вставляет его в чат. Отправляет сам посетитель
-// из своего мессенджера; сайт ничего не принимает и не хранит.
+// а кнопки открывают WhatsApp / Telegram с этим текстом. Отправляет сам посетитель из своего
+// мессенджера; сайт ничего не принимает и не хранит.
 import { type Lang, useTranslations, pick } from '../i18n/ui';
 import lessons from '../data/lessons.json';
 import site from '../data/site.json';
-import { maxUrl } from '../lib/max';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -15,6 +13,7 @@ const t = useTranslations(lang);
 const { whoOptions, timeOptions, daysAhead, skipWeekdays } = lessons.form;
 const c = site.contacts;
 
+const waDigits = c.whatsapp.replace(/\D/g, '');
 const tgUser = c.telegram.replace(/^@/, '');
 const phoneHref = c.phone ? `tel:${c.phone.replace(/[^\d+]/g, '')}` : '';
 
@@ -26,7 +25,6 @@ const texts = {
   anyDay: t('book.anyDay'),
   copied: t('book.copied'),
   copy: t('book.copy'),
-  maxCopied: t('book.maxCopied'),
 };
 ---
 <form
@@ -37,6 +35,7 @@ const texts = {
   data-days-ahead={daysAhead}
   data-skip={JSON.stringify(skipWeekdays)}
   data-texts={JSON.stringify(texts)}
+  data-wa={waDigits}
   data-tg={tgUser}
 >
   <div class="booking__head">
@@ -87,19 +86,18 @@ const texts = {
   </div>
 
   <div class="booking__actions">
-    {maxUrl && (
-      <a class="btn btn--primary" href={maxUrl} target="_blank" rel="noopener" data-send-max>
-        {t('book.max')}
+    {waDigits && (
+      <a class="btn btn--primary" href={`https://wa.me/${waDigits}`} target="_blank" rel="noopener" data-send="whatsapp">
+        {t('book.whatsapp')}
       </a>
     )}
     {tgUser && (
-      <a class:list={['btn', !maxUrl && 'btn--primary']} href={`https://t.me/${tgUser}`} target="_blank" rel="noopener" data-send-tg>
+      <a class:list={['btn', !waDigits && 'btn--primary']} href={`https://t.me/${tgUser}`} target="_blank" rel="noopener" data-send="telegram">
         {t('book.telegram')}
       </a>
     )}
     <button class="btn btn--ghost" type="button" data-copy>{t('book.copy')}</button>
   </div>
-  {maxUrl && <p class="booking__hint" role="status" data-max-hint hidden>{t('book.maxCopied')}</p>}
 
   {phoneHref && (
     <p class="booking__call">{t('book.call')}: <a href={phoneHref}>{c.phone}</a></p>
@@ -149,8 +147,6 @@ const texts = {
   .booking__actions { display: flex; flex-wrap: wrap; gap: 10px; }
   .btn--ghost { border-color: var(--line); color: var(--muted); }
   .btn--ghost:hover { color: var(--ink); }
-  .booking__hint { font-size: 14px; color: var(--accent); margin-top: -6px; }
-  .booking__hint[hidden] { display: none; }
   .booking__call { font-size: 14px; }
   .booking__call a { color: var(--accent); white-space: nowrap; }
   .booking__note { font-size: 13px; color: var(--muted); }
@@ -203,18 +199,24 @@ const texts = {
       ].join('\n');
     };
 
-    // Telegram: ссылка с готовым текстом
-    const tgLink = form.querySelector<HTMLAnchorElement>('[data-send-tg]');
+    // Ссылки мессенджеров с готовым текстом
     const update = () => {
       const text = message();
       preview.textContent = text;
-      if (tgLink) tgLink.href = `https://t.me/${form.dataset.tg}?text=${encodeURIComponent(text)}`;
+      const enc = encodeURIComponent(text);
+      form.querySelectorAll<HTMLAnchorElement>('[data-send]').forEach((a) => {
+        a.href = a.dataset.send === 'whatsapp'
+          ? `https://wa.me/${form.dataset.wa}?text=${enc}`
+          : `https://t.me/${form.dataset.tg}?text=${enc}`;
+      });
     };
     form.addEventListener('change', update);
     form.addEventListener('submit', (e) => e.preventDefault());
     update();
 
-    const copyText = async (text: string) => {
+    // Копирование текста — на случай, если мессенджер не подставит его сам
+    copyBtn.addEventListener('click', async () => {
+      const text = message();
       try {
         await navigator.clipboard.writeText(text);
       } catch {
@@ -225,21 +227,6 @@ const texts = {
         sel?.addRange(range);
         document.execCommand?.('copy');
       }
-    };
-
-    // MAX не подставляет текст в чат: копируем его, ссылка открывает чат с Еленой как обычно
-    const maxHint = form.querySelector<HTMLElement>('[data-max-hint]');
-    form.querySelector('[data-send-max]')?.addEventListener('click', () => {
-      copyText(message()).then(() => {
-        if (!maxHint) return;
-        maxHint.hidden = false;
-        setTimeout(() => (maxHint.hidden = true), 8000);
-      });
-    });
-
-    // Копирование текста — на случай, если мессенджер не подставит его сам
-    copyBtn.addEventListener('click', async () => {
-      await copyText(message());
       copyBtn.textContent = tx.copied;
       setTimeout(() => (copyBtn.textContent = tx.copy), 2000);
     });
