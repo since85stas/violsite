@@ -20,6 +20,9 @@ const tgUser = site.contacts.telegram.replace(/^@/, '');
 
 const portraits = import.meta.glob<{ default: ImageMetadata }>('../assets/portrait/*.{jpg,jpeg,png,webp}', { eager: true });
 const portrait = Object.values(portraits)[0]?.default;
+// Рамка повторяет пропорции фото, но не уже 4:5: квадратный портрет не режем по бокам (там гриф скрипки),
+// а у вертикального срезаем лишнюю высоту
+const frameRatio = portrait ? Math.max(portrait.width / portrait.height, 4 / 5) : 4 / 5;
 
 const nextDate = next
   ? new Intl.DateTimeFormat(lang === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long' })
@@ -62,7 +65,7 @@ const nextDate = next
       )}
     </div>
 
-    <div class="hero__portrait">
+    <div class="hero__portrait" style={`aspect-ratio: ${frameRatio.toFixed(4)}`}>
       {portrait ? (
         <Image
           src={portrait}
@@ -191,6 +194,8 @@ const nextDate = next
         animation-fill-mode: both, both;
         animation-timeline: auto, --hero-portrait;
         animation-range: normal, exit 0% exit 100%;
+        /* Увеличение — от точки правее центра: справа у края кадра завиток скрипки, слева — только волосы */
+        transform-origin: 70% 50%;
       }
     }
   }

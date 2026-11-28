@@ -51,6 +51,20 @@
       "meta": { "ru": "", "en": "" }
     },
     {
+      "file": "concert-17.webp",
+      "category": "concert",
+      "size": "wide",
+      "caption": { "ru": "Выступление с концертмейстером", "en": "Performing with a piano accompanist" },
+      "meta": { "ru": "Дмитровская детская школа искусств", "en": "Dmitrov Children’s School of Arts" }
+    },
+    {
+      "file": "portrait-08.webp",
+      "category": "portrait",
+      "size": "",
+      "caption": { "ru": "Студийный портрет со скрипкой", "en": "Studio portrait with the violin" },
+      "meta": { "ru": "", "en": "" }
+    },
+    {
       "file": "concert-02.jpg",
       "category": "concert",
       "size": "",
